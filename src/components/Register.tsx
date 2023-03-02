@@ -1,7 +1,7 @@
 import React from "react";
 import { api } from "~/utils/api";
 import { useForm, SubmitHandler } from "react-hook-form";
-import { signIn } from "next-auth/react";
+import { signIn, SignInResponse } from "next-auth/react";
 import { useRouter } from "next/router";
 
 type Inputs = {
@@ -24,12 +24,9 @@ const Register = (props: Props) => {
   const registerUser = api.user.register.useMutation({
     onSuccess: async () => {
       const res: any = await signIn("credentials", {
-        redirect: false,
-        email: getValues().email,
-        password: getValues().password,
+        callbackUrl: "/",
       });
-      console.log({ res });
-      res.error ? console.log(res.error) : router.push("/");
+      res?.error ? console.log(res?.error) : router.push("/");
     },
   });
   const onSubmit: SubmitHandler<Inputs> = (data) => {

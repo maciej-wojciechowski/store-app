@@ -36,11 +36,7 @@ const Home: NextPage = () => {
 export default Home;
 
 const AuthShowcase: React.FC = () => {
-  const session = useSession();
-
-  console.log(session);
-
-  const sessionData = session.data;
+  const { data: sessionData } = useSession();
 
   const { data: secretMessage } = api.example.getSecretMessage.useQuery(
     undefined, // no input
@@ -59,11 +55,13 @@ const AuthShowcase: React.FC = () => {
       >
         {sessionData ? "Sign out" : "Sign in"}
       </button>
-      <Link replace href="register">
-        <button className="rounded-full bg-white/10 px-10 py-3 font-semibold text-white no-underline transition hover:bg-white/20">
-          Register
-        </button>
-      </Link>
+      {!sessionData?.user ? (
+        <Link replace href="register">
+          <button className="rounded-full bg-white/10 px-10 py-3 font-semibold text-white no-underline transition hover:bg-white/20">
+            Register
+          </button>
+        </Link>
+      ) : null}
     </div>
   );
 };

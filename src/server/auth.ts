@@ -65,13 +65,14 @@ export const authOptions: NextAuthOptions = {
   providers: [
     CredentialsProvider({
       // The name to display on the sign in form (e.g. "Sign in with...")
+      id: "credentials",
       name: "Credentials",
       // `credentials` is used to generate a form on the sign in page.
       // You can specify which fields should be submitted, by adding keys to the `credentials` object.
       // e.g. domain, username, password, 2FA token, etc.
       // You can pass any HTML attribute to the <input> tag through the object.
       credentials: {
-        username: {
+        email: {
           label: "Email",
           type: "email",
           placeholder: "email@example.com",
@@ -83,12 +84,11 @@ export const authOptions: NextAuthOptions = {
         },
       },
       authorize: async (credentials, req) => {
-        if (!credentials?.username || !credentials.password) {
+        if (!credentials?.email || !credentials.password) {
           return null;
         }
-        const caller = appRouter.createCaller({ session: null, prisma });
-        const userFromDb = await caller.user.find({
-          email: credentials.username,
+        const userFromDb = await prisma.user.findUnique({
+          where: { email: credentials.email },
         });
         if (!userFromDb || !userFromDb.hashedPassword) {
           return null;
