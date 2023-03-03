@@ -23,10 +23,9 @@ const Register = (props: Props) => {
 
   const registerUser = api.user.register.useMutation({
     onSuccess: async () => {
-      const res: any = await signIn("credentials", {
-        callbackUrl: "/",
+      await signIn("credentials", {
+        callbackUrl: "login",
       });
-      res?.error ? console.log(res?.error) : router.push("/");
     },
   });
   const onSubmit: SubmitHandler<Inputs> = (data) => {
