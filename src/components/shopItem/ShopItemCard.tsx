@@ -14,7 +14,7 @@ function ShopItemCard({ shopItemData }: Props) {
         <div className="">
           <img
             width={"200px"}
-            className="mx-auto object-contain"
+            className="mx-auto mt-5 object-contain"
             alt={shopItemData.name}
             src={shopItemData.image}
           />
