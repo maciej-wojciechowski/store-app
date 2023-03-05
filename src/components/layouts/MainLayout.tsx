@@ -1,68 +1,64 @@
 import { Avatar, Dropdown, Layout, MenuProps } from "antd";
-import { useSession } from "next-auth/react";
+import { signIn, signOut, useSession } from "next-auth/react";
 import Head from "next/head";
 import Link from "next/link";
-import React, { PropsWithChildren } from "react";
+import React, { PropsWithChildren, ReactElement } from "react";
 import { UserOutlined } from "@ant-design/icons";
 
 const MainLayout: React.FC<PropsWithChildren> = ({ children }) => {
   const { data: sessionData } = useSession();
 
-  const getAvatar = () => {
+  const getMenuItemsAndAvatar: () => {
+    avatar: ReactElement;
+    menuItems: MenuProps["items"];
+  } = () => {
     if (!sessionData?.user) {
-      return <span className="text-xs">Log in</span>;
+      return {
+        avatar: <span className="text-xs">Log in</span>,
+        menuItems: [
+          {
+            key: "1",
+            label: <span onClick={() => signIn()}>Log in</span>,
+          },
+        ],
+      };
     }
     if (sessionData?.user.image) {
-      return (
-        <img
-          alt={sessionData.user.name || "user image"}
-          src={sessionData.user.image}
-        />
-      );
+      return {
+        avatar: (
+          <img
+            alt={sessionData.user.name || "user image"}
+            src={sessionData.user.image}
+          />
+        ),
+        menuItems: [
+          {
+            key: "1",
+            label: <Link href="#">My profile</Link>,
+          },
+          {
+            key: "2",
+            label: <span onClick={() => signOut()}>Log out</span>,
+          },
+        ],
+      };
     }
-    return <UserOutlined className="text-xl" />;
+    return {
+      avatar: <UserOutlined className="text-xl" />,
+      menuItems: [
+        {
+          key: "1",
+          label: <Link href="#">My profile</Link>,
+        },
+        {
+          key: "2",
+          label: <span onClick={() => signOut()}>Log out</span>,
+        },
+      ],
+    };
   };
 
-  const items: MenuProps["items"] = [
-    {
-      key: "1",
-      label: (
-        <a
-          target="_blank"
-          rel="noopener noreferrer"
-          href="https://www.antgroup.com"
-        >
-          Sign out
-        </a>
-      ),
-    },
-    {
-      key: "2",
-      label: (
-        <a
-          target="_blank"
-          rel="noopener noreferrer"
-          href="https://www.aliyun.com"
-        >
-          2nd menu item (disabled)
-        </a>
-      ),
-      disabled: true,
-    },
-    {
-      key: "3",
-      label: (
-        <a
-          target="_blank"
-          rel="noopener noreferrer"
-          href="https://www.luohanacademy.com"
-        >
-          3rd menu item (disabled)
-        </a>
-      ),
-      disabled: true,
-    },
-  ];
+  const { avatar, menuItems } = getMenuItemsAndAvatar();
 
   return (
     <>
@@ -78,11 +74,11 @@ const MainLayout: React.FC<PropsWithChildren> = ({ children }) => {
             <span>Store</span>
           </Link>
           <div className="flex-1" />
-          <Dropdown menu={{ items }}>
+          <Dropdown menu={{ items: menuItems }} trigger={["click"]}>
             <Avatar
-              className="bg-gray-100 text-black"
+              className="bg-gray-100 text-black hover:cursor-pointer"
               size="large"
-              src={getAvatar()}
+              src={avatar}
             />
           </Dropdown>
         </Layout.Header>
