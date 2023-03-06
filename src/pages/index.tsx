@@ -7,7 +7,7 @@ const Home: NextPage = () => {
   const { data: shopItemsData } = api.shopItem.getAll.useQuery();
 
   return (
-    <div className="grid gap-5">
+    <div className="grid grid-cols-3 gap-10">
       {shopItemsData?.length ? (
         shopItemsData.map((item) => (
           <ShopItemCard key={item.id} shopItemData={item} />

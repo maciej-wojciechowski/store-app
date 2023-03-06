@@ -9,14 +9,16 @@ type Props = {
 function ShopItemCard({ shopItemData }: Props) {
   return (
     <Card
-      className="w-[300px] shadow-xl transition-transform hover:scale-[1.01] hover:cursor-pointer"
+      className="h-[500px] w-[500px] shadow-xl transition-transform hover:scale-[1.01] hover:cursor-pointer"
       cover={
-        <div className="">
+        <div className="h-[400px] w-full overflow-hidden">
           <img
-            width={"200px"}
-            className="mx-auto mt-5 object-contain"
+            className="mx-auto my-auto"
             alt={shopItemData.name}
-            src={shopItemData.image}
+            src={
+              shopItemData.image ??
+              "https://raw.githubusercontent.com/koehlersimon/fallback/master/Resources/Public/Images/placeholder.jpg" //TODO
+            }
           />
         </div>
       }
