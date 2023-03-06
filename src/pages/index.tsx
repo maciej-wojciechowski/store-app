@@ -9,7 +9,9 @@ const Home: NextPage = () => {
   return (
     <div className="grid gap-5">
       {shopItemsData?.length ? (
-        shopItemsData.map((item) => <ShopItemCard shopItemData={item} />)
+        shopItemsData.map((item) => (
+          <ShopItemCard key={item.id} shopItemData={item} />
+        ))
       ) : (
         <span>No Items</span>
       )}

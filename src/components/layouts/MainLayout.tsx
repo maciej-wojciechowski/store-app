@@ -1,8 +1,8 @@
-import { Avatar, Dropdown, Layout, MenuProps } from "antd";
+import { Avatar, Dropdown, Layout, type MenuProps } from "antd";
 import { signIn, signOut, useSession } from "next-auth/react";
 import Head from "next/head";
 import Link from "next/link";
-import React, { PropsWithChildren, ReactElement } from "react";
+import React, { type PropsWithChildren, type ReactElement } from "react";
 import { UserOutlined } from "@ant-design/icons";
 
 const MainLayout: React.FC<PropsWithChildren> = ({ children }) => {
@@ -18,7 +18,7 @@ const MainLayout: React.FC<PropsWithChildren> = ({ children }) => {
         menuItems: [
           {
             key: "1",
-            label: <span onClick={() => signIn()}>Log in</span>,
+            label: <span onClick={() => void signIn()}>Log in</span>,
           },
         ],
       };
@@ -38,7 +38,7 @@ const MainLayout: React.FC<PropsWithChildren> = ({ children }) => {
           },
           {
             key: "2",
-            label: <span onClick={() => signOut()}>Log out</span>,
+            label: <span onClick={() => void signOut()}>Log out</span>,
           },
         ],
       };
@@ -52,7 +52,7 @@ const MainLayout: React.FC<PropsWithChildren> = ({ children }) => {
         },
         {
           key: "2",
-          label: <span onClick={() => signOut()}>Log out</span>,
+          label: <span onClick={() => void signOut()}>Log out</span>,
         },
       ],
     };

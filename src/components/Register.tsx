@@ -1,8 +1,7 @@
 import React from "react";
 import { api } from "~/utils/api";
-import { useForm, SubmitHandler } from "react-hook-form";
-import { signIn, SignInResponse } from "next-auth/react";
-import { useRouter } from "next/router";
+import { useForm, type SubmitHandler } from "react-hook-form";
+import { signIn } from "next-auth/react";
 
 type Inputs = {
   name: string;
@@ -10,12 +9,8 @@ type Inputs = {
   email: string;
 };
 
-type Props = {};
-
-const Register = (props: Props) => {
-  const router = useRouter();
+const Register = () => {
   const {
-    getValues,
     register: registerForm,
     handleSubmit,
     formState: { errors },
@@ -33,7 +28,7 @@ const Register = (props: Props) => {
   };
   return (
     <div>
-      <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col">
+      <form onSubmit={void handleSubmit(onSubmit)} className="flex flex-col">
         <input
           placeholder="name"
           {...registerForm("name", { required: true })}

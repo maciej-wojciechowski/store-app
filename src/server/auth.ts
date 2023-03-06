@@ -9,7 +9,6 @@ import GITHUBProvider from "next-auth/providers/GITHUB";
 import { PrismaAdapter } from "@next-auth/prisma-adapter";
 import { env } from "~/env.mjs";
 import { prisma } from "~/server/db";
-import { appRouter } from "./api/root";
 import bcrypt from "bcrypt";
 
 /**
@@ -83,7 +82,7 @@ export const authOptions: NextAuthOptions = {
           placeholder: "password",
         },
       },
-      authorize: async (credentials, req) => {
+      authorize: async (credentials) => {
         if (!credentials?.email || !credentials.password) {
           return null;
         }

@@ -1,4 +1,4 @@
-import { ShopItem } from "@prisma/client";
+import { type ShopItem } from "@prisma/client";
 import { Card } from "antd";
 import React from "react";
 
@@ -23,7 +23,7 @@ function ShopItemCard({ shopItemData }: Props) {
     >
       <Card.Meta
         title={shopItemData.name}
-        description={"Price: " + shopItemData.price + " PLN"}
+        description={"Price: " + String(shopItemData.price) + " PLN"}
       />
     </Card>
   );
