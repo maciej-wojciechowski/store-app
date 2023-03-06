@@ -19,12 +19,12 @@ model Account {
     type              String
     provider          String
     providerAccountId String
-    refresh_token     String? @db.Text
-    access_token      String? @db.Text
+    refresh_token     String?
+    access_token      String?
     expires_at        Int?
     token_type        String?
     scope             String?
-    id_token          String? @db.Text
+    id_token          String?
     session_state     String?
     user              User    @relation(fields: [userId], references: [id], onDelete: Cascade)
 
@@ -59,11 +59,23 @@ model VerificationToken {
 }
 
 model ShopItem {
-    id          String @id @default(cuid())
+    id          String   @id @unique @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
     name        String
     description String
     price       Float
     stock       Int
-    image       String
-    category    String
+    image       String?
+    category    Category @default(others)
+}
+
+enum Category {
+    accessories
+    tires
+    parts
+    oils
+    electronics
+    suspension
+    exhaust_systems
+    engine_parts
+    others
 }
