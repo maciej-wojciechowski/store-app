@@ -1,14 +1,27 @@
-import { Avatar, Dropdown, Layout, type MenuProps } from "antd";
+import { Avatar, Dropdown, Layout, Menu, type MenuProps } from "antd";
 import { signIn, signOut, useSession } from "next-auth/react";
 import Head from "next/head";
 import Link from "next/link";
 import React, { type PropsWithChildren, type ReactElement } from "react";
-import { UserOutlined } from "@ant-design/icons";
+import { UserOutlined, MenuUnfoldOutlined } from "@ant-design/icons";
+import { getCategoriesKeyLabelWithAll } from "~/helpers/selectsHelpers";
+import { useCategoryStore } from "~/stores/categoryStore";
+import { type Category } from "@prisma/client";
+
+const SideMenuItems: MenuProps["items"] = [
+  {
+    key: "categories",
+    icon: <MenuUnfoldOutlined />,
+    label: "Categories",
+    children: getCategoriesKeyLabelWithAll(),
+  },
+];
 
 const MainLayout: React.FC<PropsWithChildren> = ({ children }) => {
   const { data: sessionData } = useSession();
+  const setCategory = useCategoryStore((state) => state.setCategory);
 
-  const getMenuItemsAndAvatar: () => {
+  const getLogoMenuItemsAndAvatar: () => {
     avatar: ReactElement;
     menuItems: MenuProps["items"];
   } = () => {
@@ -58,7 +71,7 @@ const MainLayout: React.FC<PropsWithChildren> = ({ children }) => {
     };
   };
 
-  const { avatar, menuItems } = getMenuItemsAndAvatar();
+  const { avatar, menuItems } = getLogoMenuItemsAndAvatar();
 
   return (
     <>
@@ -82,9 +95,28 @@ const MainLayout: React.FC<PropsWithChildren> = ({ children }) => {
             />
           </Dropdown>
         </Layout.Header>
-        <Layout.Content className="flex h-[calc(100vh-65px)] h-screen w-screen flex-col overflow-scroll py-6 px-12">
-          {children}
-        </Layout.Content>
+        <Layout>
+          <Layout.Sider width={200} style={{ background: "#fff" }}>
+            <Menu
+              onSelect={({ key }) => {
+                if (key === "all") {
+                  setCategory(null);
+                  return;
+                }
+                setCategory(key as Category);
+              }}
+              mode="inline"
+              defaultSelectedKeys={["1"]}
+              defaultOpenKeys={["sub1"]}
+              style={{ height: "100%", borderRight: 0 }}
+              items={SideMenuItems}
+            />
+          </Layout.Sider>
+
+          <Layout.Content className="flex h-screen w-screen flex-col overflow-scroll py-6 px-12">
+            {children}
+          </Layout.Content>
+        </Layout>
       </Layout>
     </>
   );

@@ -9,11 +9,13 @@ type Props = {
 function ShopItemCard({ shopItemData }: Props) {
   return (
     <Card
-      className="h-[500px] w-[500px] shadow-xl transition-transform hover:scale-[1.01] hover:cursor-pointer"
+      hoverable
+      style={{ width: 400 }}
+      className="shadow-xl transition-transform hover:cursor-pointer"
       cover={
-        <div className="h-[400px] w-full overflow-hidden">
+        <div className="h-72 overflow-hidden">
           <img
-            className="mx-auto my-auto"
+            className="mx-auto"
             alt={shopItemData.name}
             src={
               shopItemData.image ??
