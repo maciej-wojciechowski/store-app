@@ -1,11 +1,11 @@
 import { type NextPage } from "next";
 import ShopItemCard from "~/components/shopItem/ShopItemCard";
-import { useCategoryStore } from "~/stores/categoryStore";
+import { useFiltersStore } from "~/stores/categoryStore";
 
 import { api } from "~/utils/api";
 
 const Home: NextPage = () => {
-  const category = useCategoryStore((state) => state.category);
+  const category = useFiltersStore((state) => state.filters.category);
 
   const { data: shopItemsData } = api.shopItem.getAll.useQuery({
     category: category,

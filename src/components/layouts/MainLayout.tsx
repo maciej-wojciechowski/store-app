@@ -5,7 +5,7 @@ import Link from "next/link";
 import React, { type PropsWithChildren, type ReactElement } from "react";
 import { UserOutlined, MenuUnfoldOutlined } from "@ant-design/icons";
 import { getCategoriesKeyLabelWithAll } from "~/helpers/selectsHelpers";
-import { useCategoryStore } from "~/stores/categoryStore";
+import { useFiltersStore } from "~/stores/categoryStore";
 import { type Category } from "@prisma/client";
 
 const SideMenuItems: MenuProps["items"] = [
@@ -19,7 +19,10 @@ const SideMenuItems: MenuProps["items"] = [
 
 const MainLayout: React.FC<PropsWithChildren> = ({ children }) => {
   const { data: sessionData } = useSession();
-  const setCategory = useCategoryStore((state) => state.setCategory);
+  const {
+    filters: { category },
+    setCategory,
+  } = useFiltersStore();
 
   const getLogoMenuItemsAndAvatar: () => {
     avatar: ReactElement;
@@ -107,7 +110,8 @@ const MainLayout: React.FC<PropsWithChildren> = ({ children }) => {
               }}
               mode="inline"
               defaultSelectedKeys={["1"]}
-              defaultOpenKeys={["sub1"]}
+              selectedKeys={[category ?? "all"]}
+              // defaultOpenKeys={["sub1"]}
               style={{ height: "100%", borderRight: 0 }}
               items={SideMenuItems}
             />
