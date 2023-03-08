@@ -1,21 +1,21 @@
-import { Avatar, Dropdown, Layout, Menu, type MenuProps } from "antd";
+import { Avatar, Dropdown, Layout, Menu, Popover, type MenuProps } from "antd";
 import { signIn, signOut, useSession } from "next-auth/react";
 import Head from "next/head";
 import Link from "next/link";
-import React, { type PropsWithChildren, type ReactElement } from "react";
-import { UserOutlined, MenuUnfoldOutlined } from "@ant-design/icons";
+import React, {
+  useRef,
+  type PropsWithChildren,
+  type ReactElement,
+} from "react";
+import {
+  UserOutlined,
+  MenuUnfoldOutlined,
+  SlidersOutlined,
+} from "@ant-design/icons";
 import { getCategoriesKeyLabelWithAll } from "~/helpers/selectsHelpers";
 import { useFiltersStore } from "~/stores/categoryStore";
 import { type Category } from "@prisma/client";
-
-const SideMenuItems: MenuProps["items"] = [
-  {
-    key: "categories",
-    icon: <MenuUnfoldOutlined />,
-    label: "Categories",
-    children: getCategoriesKeyLabelWithAll(),
-  },
-];
+import PriceRangeFilter from "../filters/PriceRangeFilter";
 
 const MainLayout: React.FC<PropsWithChildren> = ({ children }) => {
   const { data: sessionData } = useSession();
@@ -23,6 +23,20 @@ const MainLayout: React.FC<PropsWithChildren> = ({ children }) => {
     filters: { category },
     setCategory,
   } = useFiltersStore();
+
+  const SideMenuItems: MenuProps["items"] = [
+    {
+      key: "categories",
+      icon: <MenuUnfoldOutlined />,
+      label: "Categories",
+      children: getCategoriesKeyLabelWithAll(),
+    },
+    {
+      key: "priceRange",
+      icon: <SlidersOutlined />,
+      label: "Price",
+    },
+  ];
 
   const getLogoMenuItemsAndAvatar: () => {
     avatar: ReactElement;
@@ -101,16 +115,28 @@ const MainLayout: React.FC<PropsWithChildren> = ({ children }) => {
         <Layout>
           <Layout.Sider width={200} style={{ background: "#fff" }}>
             <Menu
-              onSelect={({ key }) => {
-                setCategory(key as Category);
+              onSelect={({ key, keyPath }) => {
+                if (keyPath.length === 2 && keyPath[1] === "categories")
+                  setCategory(key as Category);
               }}
-              mode="inline"
-              defaultSelectedKeys={["1"]}
+              mode="vertical"
               selectedKeys={[category ?? "all"]}
-              // defaultOpenKeys={["sub1"]}
               style={{ height: "100%", borderRight: 0 }}
-              items={SideMenuItems}
-            />
+              // items={SideMenuItems}
+            >
+              <Menu.SubMenu
+                title="Categories"
+                key="categories"
+                icon={<MenuUnfoldOutlined />}
+              >
+                {getCategoriesKeyLabelWithAll().map(({ key, label }) => (
+                  <Menu.Item key={key}>{label}</Menu.Item>
+                ))}
+              </Menu.SubMenu>
+              <Popover placement="rightTop" content={<PriceRangeFilter />}>
+                <Menu.Item icon={<SlidersOutlined />}>Price range</Menu.Item>
+              </Popover>
+            </Menu>
           </Layout.Sider>
 
           <Layout.Content className="flex h-screen w-screen flex-col overflow-scroll py-6 px-12">

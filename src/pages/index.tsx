@@ -7,10 +7,11 @@ import { useFiltersStore } from "~/stores/categoryStore";
 import { api } from "~/utils/api";
 
 const Home: NextPage = () => {
-  const category = useFiltersStore((state) => state.filters.category);
+  const filters = useFiltersStore((state) => state.filters);
 
   const { data: shopItemsData, isLoading } = api.shopItem.getAll.useQuery({
-    category: category === "all" ? null : category,
+    category: filters.category === "all" ? null : filters.category,
+    priceRange: filters.priceRange,
   });
 
   return (
