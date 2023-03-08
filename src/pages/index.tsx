@@ -18,15 +18,17 @@ const Home: NextPage = () => {
     <div>
       <Filters />
       <Spin spinning={isLoading}>
-        <div className="mx-12 mb-14 grid grid-cols-3 gap-10">
-          {shopItemsData?.length ? (
-            shopItemsData.map((item) => (
+        {shopItemsData?.length ? (
+          <div className="mx-12 mb-14 grid grid-cols-3 gap-10">
+            {shopItemsData.map((item) => (
               <ShopItemCard key={item.id} shopItemData={item} />
-            ))
-          ) : (
-            <span>No Items</span>
-          )}
-        </div>
+            ))}
+          </div>
+        ) : (
+          <div className="flex h-full min-h-[80vh] w-full">
+            <span className="m-auto">No Items</span>
+          </div>
+        )}
       </Spin>
     </div>
   );

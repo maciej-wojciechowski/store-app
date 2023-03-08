@@ -5,7 +5,7 @@ import { useFiltersStore } from "~/stores/categoryStore";
 const PriceRangeFilter = () => {
   const setPriceRange = useFiltersStore((state) => state.setPriceRange);
   return (
-    <div>
+    <div className="w-80">
       PriceRangeFilter
       <Slider
         defaultValue={[0, 10000]}
