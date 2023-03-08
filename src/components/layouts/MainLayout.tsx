@@ -102,10 +102,6 @@ const MainLayout: React.FC<PropsWithChildren> = ({ children }) => {
           <Layout.Sider width={200} style={{ background: "#fff" }}>
             <Menu
               onSelect={({ key }) => {
-                if (key === "all") {
-                  setCategory(null);
-                  return;
-                }
                 setCategory(key as Category);
               }}
               mode="inline"
