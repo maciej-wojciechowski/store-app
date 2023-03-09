@@ -11,6 +11,7 @@ interface FiltersStore {
   filters: IFilters;
   setCategory: (category: IFilters["category"]) => void;
   setPriceRange: (priceRange: IFilters["priceRange"]) => void;
+  setFilters: <T extends keyof IFilters>(key: T, newValue: IFilters[T]) => void;
   resetFilters: () => void;
 }
 
@@ -26,6 +27,10 @@ export const useFiltersStore = create(
     setPriceRange: (priceRange) =>
       set((state) => {
         state.filters.priceRange = priceRange;
+      }),
+    setFilters: (key, newValue) =>
+      set((state) => {
+        state.filters[key] = newValue;
       }),
     resetFilters: () => set({ filters: DEFAULT_FILTERS }),
   }))

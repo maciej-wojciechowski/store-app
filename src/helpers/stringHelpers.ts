@@ -11,3 +11,12 @@ export const capitalizeKeys = (string: string) => {
     })
     .join(" ");
 };
+
+export const camelCaseToLabels = (string: string) => {
+  const firstLetter = string[0];
+  if (!firstLetter) {
+    return "";
+  }
+  const capitalized = string.replace(/([a-z])([A-Z])/g, "$1 $2");
+  return firstLetter.toUpperCase() + capitalized.slice(1);
+};

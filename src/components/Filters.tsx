@@ -1,6 +1,6 @@
 import { Tag } from "antd";
 import React from "react";
-import { capitalizeKeys } from "~/helpers/stringHelpers";
+import { camelCaseToLabels, capitalizeKeys } from "~/helpers/stringHelpers";
 import { MenuUnfoldOutlined, SlidersOutlined } from "@ant-design/icons";
 
 import { type IFilters, useFiltersStore } from "~/stores/categoryStore";
@@ -29,7 +29,7 @@ const getFilterValue = (k: keyof IFilters, v: ValueOf<IFilters>): string => {
 };
 
 const Filters = () => {
-  const filters = useFiltersStore((state) => state.filters);
+  const { filters, setFilters } = useFiltersStore((state) => state);
   return (
     <div className="mb-5">
       {Object.entries(filters).map(([key, val]) => {
@@ -43,9 +43,11 @@ const Filters = () => {
             className="[&_.anticon]:inline-flex"
             icon={getIconForFilter(k)}
             color="blue"
+            closable={k !== "category"}
             key={k}
+            onClose={() => void setFilters(k, null)}
           >
-            {capitalizeKeys(k) + ": " + capitalizeKeys(getFilterValue(k, v))}
+            {camelCaseToLabels(k) + ": " + capitalizeKeys(getFilterValue(k, v))}
           </Tag>
         );
       })}

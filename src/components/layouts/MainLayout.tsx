@@ -134,7 +134,7 @@ const MainLayout: React.FC<PropsWithChildren> = ({ children }) => {
                 ))}
               </Menu.SubMenu>
               <Popover placement="rightTop" content={<PriceRangeFilter />}>
-                <Menu.Item icon={<SlidersOutlined />}>Price range</Menu.Item>
+                <Menu.Item icon={<SlidersOutlined />}>Price Range</Menu.Item>
               </Popover>
             </Menu>
           </Layout.Sider>

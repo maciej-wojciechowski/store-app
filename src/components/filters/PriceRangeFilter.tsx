@@ -1,18 +1,36 @@
-import { Slider } from "antd";
-import React from "react";
+import { Button, InputNumber, Slider } from "antd";
+import React, { useState } from "react";
 import { useFiltersStore } from "~/stores/categoryStore";
 
+const MAX = 10000;
+
 const PriceRangeFilter = () => {
+  const [range, setRange] = useState<[number, number]>([0, MAX]);
   const setPriceRange = useFiltersStore((state) => state.setPriceRange);
   return (
     <div className="w-80">
-      PriceRangeFilter
       <Slider
-        defaultValue={[0, 10000]}
-        max={10000}
+        value={range}
+        max={MAX}
         range
-        onAfterChange={(val) => setPriceRange(val)}
+        onChange={(val) => void setRange(val)}
       />
+      <div className="flex">
+        <InputNumber
+          onChange={(minVal) => setRange((state) => [minVal ?? 0, state[1]])}
+          value={range[0]}
+          max={range[1]}
+        />
+        <InputNumber
+          onChange={(maxVal) => setRange((state) => [state[0], maxVal ?? 0])}
+          className="mx-auto"
+          min={range[0]}
+          value={range[1]}
+        />
+        <Button className="ml-auto" onClick={() => setPriceRange(range)}>
+          Apply
+        </Button>
+      </div>
     </div>
   );
 };
