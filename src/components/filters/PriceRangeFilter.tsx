@@ -1,12 +1,22 @@
 import { Button, InputNumber, Slider } from "antd";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useFiltersStore } from "~/stores/categoryStore";
 
 const MAX = 10000;
 
 const PriceRangeFilter = () => {
   const [range, setRange] = useState<[number, number]>([0, MAX]);
-  const setPriceRange = useFiltersStore((state) => state.setPriceRange);
+  const { setPriceRange, priceRange } = useFiltersStore((state) => ({
+    setPriceRange: state.setPriceRange,
+    priceRange: state.filters.priceRange,
+  }));
+
+  useEffect(() => {
+    if (priceRange === null) {
+      setRange([0, MAX]);
+    }
+  }, [priceRange]);
+
   return (
     <div className="w-80">
       <Slider
