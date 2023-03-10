@@ -1,4 +1,4 @@
-import { Category } from "@prisma/client";
+import { Category, Producer } from "@prisma/client";
 import { z } from "zod";
 import { createTRPCRouter, publicProcedure } from "~/server/api/trpc";
 
@@ -7,6 +7,7 @@ export const shopItemRouter = createTRPCRouter({
     .input(
       z.object({
         category: z.nullable(z.nativeEnum(Category)),
+        producer: z.nullable(z.nativeEnum(Producer)),
         priceRange: z.nullable(z.array(z.number(), z.number())),
       })
     )
@@ -14,6 +15,9 @@ export const shopItemRouter = createTRPCRouter({
       const where: Record<string, unknown> = {};
       if (input.category) {
         where.category = input.category;
+      }
+      if (input.producer) {
+        where.producer = input.producer;
       }
       if (input.priceRange) {
         where.price = {

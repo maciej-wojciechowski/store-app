@@ -12,6 +12,7 @@ const Home: NextPage = () => {
   const { data: shopItemsData, isLoading } = api.shopItem.getAll.useQuery({
     category: filters.category === "all" ? null : filters.category,
     priceRange: filters.priceRange,
+    producer: filters.producer,
   });
 
   return (

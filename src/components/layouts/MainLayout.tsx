@@ -2,19 +2,19 @@ import { Avatar, Dropdown, Layout, Menu, Popover, type MenuProps } from "antd";
 import { signIn, signOut, useSession } from "next-auth/react";
 import Head from "next/head";
 import Link from "next/link";
-import React, {
-  useRef,
-  type PropsWithChildren,
-  type ReactElement,
-} from "react";
+import React, { type PropsWithChildren, type ReactElement } from "react";
 import {
   UserOutlined,
   MenuUnfoldOutlined,
   SlidersOutlined,
+  BuildOutlined,
 } from "@ant-design/icons";
-import { getCategoriesKeyLabelWithAll } from "~/helpers/selectsHelpers";
+import {
+  getCategoriesKeyLabelWithAll,
+  getProducersKeyLabel,
+} from "~/helpers/selectsHelpers";
 import { useFiltersStore } from "~/stores/categoryStore";
-import { type Category } from "@prisma/client";
+import { type Producer, type Category } from "@prisma/client";
 import PriceRangeFilter from "../filters/PriceRangeFilter";
 
 const MainLayout: React.FC<PropsWithChildren> = ({ children }) => {
@@ -22,21 +22,8 @@ const MainLayout: React.FC<PropsWithChildren> = ({ children }) => {
   const {
     filters: { category },
     setCategory,
+    setProducer,
   } = useFiltersStore();
-
-  const SideMenuItems: MenuProps["items"] = [
-    {
-      key: "categories",
-      icon: <MenuUnfoldOutlined />,
-      label: "Categories",
-      children: getCategoriesKeyLabelWithAll(),
-    },
-    {
-      key: "priceRange",
-      icon: <SlidersOutlined />,
-      label: "Price",
-    },
-  ];
 
   const getLogoMenuItemsAndAvatar: () => {
     avatar: ReactElement;
@@ -116,13 +103,18 @@ const MainLayout: React.FC<PropsWithChildren> = ({ children }) => {
           <Layout.Sider width={200} style={{ background: "#fff" }}>
             <Menu
               onSelect={({ key, keyPath }) => {
-                if (keyPath.length === 2 && keyPath[1] === "categories")
-                  setCategory(key as Category);
+                if (keyPath.length === 2) {
+                  if (keyPath[1] === "categories") {
+                    setCategory(key as Category);
+                  }
+                  if (keyPath[1] === "producers") {
+                    setProducer(key as Producer);
+                  }
+                }
               }}
               mode="vertical"
               selectedKeys={[category ?? "all"]}
               style={{ height: "100%", borderRight: 0 }}
-              // items={SideMenuItems}
             >
               <Menu.SubMenu
                 title="Categories"
@@ -130,6 +122,15 @@ const MainLayout: React.FC<PropsWithChildren> = ({ children }) => {
                 icon={<MenuUnfoldOutlined />}
               >
                 {getCategoriesKeyLabelWithAll().map(({ key, label }) => (
+                  <Menu.Item key={key}>{label}</Menu.Item>
+                ))}
+              </Menu.SubMenu>
+              <Menu.SubMenu
+                title="Producers"
+                key="producers"
+                icon={<BuildOutlined />}
+              >
+                {getProducersKeyLabel().map(({ key, label }) => (
                   <Menu.Item key={key}>{label}</Menu.Item>
                 ))}
               </Menu.SubMenu>
