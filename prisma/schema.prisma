@@ -66,6 +66,7 @@ model ShopItem {
     stock       Int
     image       String?
     category    Category @default(others)
+    producer    Producer @default(other)
 }
 
 enum Category {
@@ -78,4 +79,12 @@ enum Category {
     exhaust_systems
     engine_parts
     others
+}
+
+enum Producer {
+    nice_producer
+    bad_producer
+    medium_producer
+    so_so_producer
+    other
 }
