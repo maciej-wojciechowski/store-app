@@ -1,6 +1,6 @@
 import { Spin } from "antd";
 import { type NextPage } from "next";
-import Filters from "~/components/Filters";
+import Filters from "~/components/filters/Filters";
 import ShopItemCard from "~/components/shopItem/ShopItemCard";
 import { useFiltersStore } from "~/stores/categoryStore";
 
@@ -16,21 +16,23 @@ const Home: NextPage = () => {
   });
 
   return (
-    <div>
+    <div className="max-h-[80vh] overflow-hidden">
       <Filters />
-      <Spin spinning={isLoading}>
-        {shopItemsData?.length ? (
-          <div className="mx-12 mb-14 grid grid-cols-3 gap-10">
-            {shopItemsData.map((item) => (
-              <ShopItemCard key={item.id} shopItemData={item} />
-            ))}
-          </div>
-        ) : (
-          <div className="flex h-full min-h-[80vh] w-full">
-            <span className="m-auto">No Items</span>
-          </div>
-        )}
-      </Spin>
+      <div className="h-full overflow-scroll">
+        <Spin spinning={isLoading}>
+          {shopItemsData?.length ? (
+            <div className="mx-12 mb-14 grid grid-cols-3 gap-10">
+              {shopItemsData.map((item) => (
+                <ShopItemCard key={item.id} shopItemData={item} />
+              ))}
+            </div>
+          ) : (
+            <div className="flex h-full min-h-[80vh] w-full">
+              {!isLoading && <span className="m-auto">No Items</span>}
+            </div>
+          )}
+        </Spin>
+      </div>
     </div>
   );
 };

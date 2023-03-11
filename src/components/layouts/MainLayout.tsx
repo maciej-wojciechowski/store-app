@@ -1,29 +1,12 @@
-import { Avatar, Dropdown, Layout, Menu, Popover, type MenuProps } from "antd";
+import { Avatar, Dropdown, Layout, type MenuProps } from "antd";
 import { signIn, signOut, useSession } from "next-auth/react";
 import Head from "next/head";
 import Link from "next/link";
 import React, { type PropsWithChildren, type ReactElement } from "react";
-import {
-  UserOutlined,
-  MenuUnfoldOutlined,
-  SlidersOutlined,
-  BuildOutlined,
-} from "@ant-design/icons";
-import {
-  getCategoriesKeyLabelWithAll,
-  getProducersKeyLabel,
-} from "~/helpers/selectsHelpers";
-import { useFiltersStore } from "~/stores/categoryStore";
-import { type Producer, type Category } from "@prisma/client";
-import PriceRangeFilter from "../filters/PriceRangeFilter";
+import { UserOutlined } from "@ant-design/icons";
 
 const MainLayout: React.FC<PropsWithChildren> = ({ children }) => {
   const { data: sessionData } = useSession();
-  const {
-    filters: { category },
-    setCategory,
-    setProducer,
-  } = useFiltersStore();
 
   const getLogoMenuItemsAndAvatar: () => {
     avatar: ReactElement;
@@ -100,46 +83,6 @@ const MainLayout: React.FC<PropsWithChildren> = ({ children }) => {
           </Dropdown>
         </Layout.Header>
         <Layout>
-          <Layout.Sider width={200} style={{ background: "#fff" }}>
-            <Menu
-              onSelect={({ key, keyPath }) => {
-                if (keyPath.length === 2) {
-                  if (keyPath[1] === "categories") {
-                    setCategory(key as Category);
-                  }
-                  if (keyPath[1] === "producers") {
-                    setProducer(key as Producer);
-                  }
-                }
-              }}
-              mode="vertical"
-              selectedKeys={[category ?? "all"]}
-              style={{ height: "100%", borderRight: 0 }}
-            >
-              <Menu.SubMenu
-                title="Categories"
-                key="categories"
-                icon={<MenuUnfoldOutlined />}
-              >
-                {getCategoriesKeyLabelWithAll().map(({ key, label }) => (
-                  <Menu.Item key={key}>{label}</Menu.Item>
-                ))}
-              </Menu.SubMenu>
-              <Menu.SubMenu
-                title="Producers"
-                key="producers"
-                icon={<BuildOutlined />}
-              >
-                {getProducersKeyLabel().map(({ key, label }) => (
-                  <Menu.Item key={key}>{label}</Menu.Item>
-                ))}
-              </Menu.SubMenu>
-              <Popover placement="rightTop" content={<PriceRangeFilter />}>
-                <Menu.Item icon={<SlidersOutlined />}>Price Range</Menu.Item>
-              </Popover>
-            </Menu>
-          </Layout.Sider>
-
           <Layout.Content className="flex h-screen w-screen flex-col overflow-scroll py-6 px-12">
             {children}
           </Layout.Content>
