@@ -29,4 +29,11 @@ export const shopItemRouter = createTRPCRouter({
         where,
       });
     }),
+  getOne: publicProcedure.input(z.string()).query(({ ctx, input }) => {
+    return ctx.prisma.shopItem.findUnique({
+      where: {
+        id: input,
+      },
+    });
+  }),
 });
