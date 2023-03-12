@@ -82,11 +82,9 @@ const MainLayout: React.FC<PropsWithChildren> = ({ children }) => {
             />
           </Dropdown>
         </Layout.Header>
-        <Layout>
-          <Layout.Content className="flex h-screen w-screen flex-col overflow-scroll py-6 px-12">
-            {children}
-          </Layout.Content>
-        </Layout>
+        <Layout.Content className="relative flex h-screen w-screen flex-col overflow-scroll">
+          {children}
+        </Layout.Content>
       </Layout>
     </>
   );

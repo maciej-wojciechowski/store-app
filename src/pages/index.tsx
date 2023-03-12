@@ -16,9 +16,9 @@ const Home: NextPage = () => {
   });
 
   return (
-    <div className="max-h-[80vh] overflow-hidden">
+    <div>
       <Filters />
-      <div className="h-full overflow-scroll">
+      <div className="mx-auto">
         <Spin spinning={isLoading}>
           {shopItemsData?.length ? (
             <div className="mx-12 mb-14 grid grid-cols-3 gap-10">

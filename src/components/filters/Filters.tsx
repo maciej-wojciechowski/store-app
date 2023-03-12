@@ -49,7 +49,7 @@ const Filters = () => {
   );
   return (
     <>
-      <div className="mb-5 flex gap-3 py-5 pl-9">
+      <div className="sticky top-0 left-0 z-10 mb-5 flex gap-3 py-5 pl-9 backdrop-blur">
         <Button
           size="large"
           icon={<FilterOutlined />}
