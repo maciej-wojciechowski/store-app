@@ -7,6 +7,7 @@ import { api } from "~/utils/api";
 
 import "~/styles/globals.css";
 import MainLayout from "~/components/layouts/MainLayout";
+import { ConfigProvider } from "antd";
 
 const MyApp: AppType<{ session: Session | null }> = ({
   Component,
@@ -14,10 +15,18 @@ const MyApp: AppType<{ session: Session | null }> = ({
 }) => {
   return (
     <SessionProvider session={session}>
-      <MainLayout>
-        <ReactQueryDevtools initialIsOpen={false} />
-        <Component {...pageProps} />
-      </MainLayout>
+      <ConfigProvider
+        theme={{
+          token: {
+            colorPrimary: "37306B",
+          },
+        }}
+      >
+        <MainLayout>
+          <ReactQueryDevtools initialIsOpen={false} />
+          <Component {...pageProps} />
+        </MainLayout>
+      </ConfigProvider>
     </SessionProvider>
   );
 };

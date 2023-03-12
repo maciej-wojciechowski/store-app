@@ -69,14 +69,14 @@ const MainLayout: React.FC<PropsWithChildren> = ({ children }) => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <Layout className="h-[100vh] overflow-hidden">
-        <Layout.Header className="flex items-center text-white">
+        <Layout.Header className="flex items-center bg-themeBlack text-themeWhite">
           <Link href={"/"}>
             <span>Store</span>
           </Link>
           <div className="flex-1" />
           <Dropdown menu={{ items: menuItems }} trigger={["click"]}>
             <Avatar
-              className="bg-gray-100 text-black hover:cursor-pointer"
+              className="bg-themeGrey ring-2 ring-themeTurkish hover:cursor-pointer"
               size="large"
               src={avatar}
             />
