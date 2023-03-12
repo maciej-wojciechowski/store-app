@@ -1,5 +1,5 @@
 import { type ShopItem } from "@prisma/client";
-import { Descriptions } from "antd";
+import { Button, Descriptions } from "antd";
 import {
   type GetServerSideProps,
   type NextPage,
@@ -8,6 +8,8 @@ import {
 import React from "react";
 import { capitalizeKeys } from "~/helpers/stringHelpers";
 import { prisma } from "~/server/db";
+import { LeftOutlined } from "@ant-design/icons";
+import Link from "next/link";
 
 export const getServerSideProps: GetServerSideProps<
   { shopItem: ShopItem },
@@ -27,29 +29,43 @@ const ItemPage: NextPage<
   InferGetServerSidePropsType<typeof getServerSideProps>
 > = ({ shopItem }) => {
   return (
-    <div>
+    <div className="px-6">
+      <div className="py-6">
+        <Link href="/">
+          <Button icon={<LeftOutlined />}></Button>
+        </Link>
+      </div>
       <img
+        className="mx-auto"
         src={
           shopItem.image ??
           "https://raw.githubusercontent.com/koehlersimon/fallback/master/Resources/Public/Images/placeholder.jpg"
         }
         alt={shopItem.name}
       />
-      <Descriptions
-        column={1}
-        layout="horizontal"
-        title={shopItem.name}
-        bordered
-      >
-        <Descriptions.Item label="Price">{shopItem.price}</Descriptions.Item>
-        <Descriptions.Item label="In stock">{shopItem.stock}</Descriptions.Item>
-        <Descriptions.Item label="Producer">
-          {capitalizeKeys(shopItem.producer)}
-        </Descriptions.Item>
-        <Descriptions.Item label="Description">
-          {shopItem.description}
-        </Descriptions.Item>
-      </Descriptions>
+      <div className="mx-auto my-10 max-w-4xl">
+        <Button className=" float-right bg-themeTurkish text-white ">
+          Add to cart
+        </Button>
+        <Descriptions
+          className=""
+          column={1}
+          layout="horizontal"
+          title={shopItem.name}
+          bordered
+        >
+          <Descriptions.Item label="Price">{shopItem.price}</Descriptions.Item>
+          <Descriptions.Item label="In stock">
+            {shopItem.stock}
+          </Descriptions.Item>
+          <Descriptions.Item label="Producer">
+            {capitalizeKeys(shopItem.producer)}
+          </Descriptions.Item>
+          <Descriptions.Item label="Description">
+            {shopItem.description}
+          </Descriptions.Item>
+        </Descriptions>
+      </div>
     </div>
   );
 };
