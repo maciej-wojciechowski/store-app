@@ -70,7 +70,7 @@ const MainLayout: React.FC<PropsWithChildren> = ({ children }) => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <Layout className="h-[100vh] overflow-hidden">
-        <Layout.Header className="flex items-center bg-themeBlack text-themeWhite">
+        <Layout.Header className="flex items-center bg-themeGrey text-themeWhite">
           <Link href={"/"}>
             <span>Store</span>
           </Link>

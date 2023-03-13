@@ -20,6 +20,7 @@ const PriceRangeFilter = () => {
   return (
     <div className="w-80">
       <Slider
+        className="mb-6"
         value={range}
         max={MAX}
         range
@@ -27,17 +28,22 @@ const PriceRangeFilter = () => {
       />
       <div className="flex">
         <InputNumber
+          className="w-24 flex-none"
           onChange={(minVal) => setRange((state) => [minVal ?? 0, state[1]])}
           value={range[0]}
+          min={0}
           max={range[1]}
         />
+        <span className="mt-0 flex-1 flex-grow text-center text-xl">-</span>
         <InputNumber
+          addonAfter="PLN"
           onChange={(maxVal) => setRange((state) => [state[0], maxVal ?? 0])}
-          className="mx-auto"
+          className="w-32 flex-none"
           min={range[0]}
+          max={MAX}
           value={range[1]}
         />
-        <Button className="ml-auto" onClick={() => setPriceRange(range)}>
+        <Button className="ml-2 flex-none" onClick={() => setPriceRange(range)}>
           Apply
         </Button>
       </div>
