@@ -10,6 +10,7 @@ import { capitalizeKeys } from "~/helpers/stringHelpers";
 import { prisma } from "~/server/db";
 import { LeftOutlined } from "@ant-design/icons";
 import Link from "next/link";
+import { useCartStore } from "~/stores/cartStore";
 
 export const getServerSideProps: GetServerSideProps<
   { shopItem: ShopItem },
@@ -28,9 +29,10 @@ export const getServerSideProps: GetServerSideProps<
 const ItemPage: NextPage<
   InferGetServerSidePropsType<typeof getServerSideProps>
 > = ({ shopItem }) => {
+  const addItem = useCartStore((state) => state.addItem);
   return (
     <div className="px-6">
-      <div className="py-6">
+      <div className="sticky top-0 py-6">
         <Link href="/">
           <Button icon={<LeftOutlined />}></Button>
         </Link>
@@ -44,7 +46,10 @@ const ItemPage: NextPage<
         alt={shopItem.name}
       />
       <div className="mx-auto my-10 max-w-4xl">
-        <Button className=" float-right bg-themeTurkish text-white ">
+        <Button
+          onClick={() => addItem({ id: shopItem.id })}
+          className=" float-right bg-themeTurkish text-white "
+        >
           Add to cart
         </Button>
         <Descriptions

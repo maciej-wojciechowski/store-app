@@ -18,7 +18,7 @@ const MyApp: AppType<{ session: Session | null }> = ({
       <ConfigProvider
         theme={{
           token: {
-            colorPrimary: "37306B",
+            colorPrimary: "222222",
           },
         }}
       >

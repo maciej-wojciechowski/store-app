@@ -12,7 +12,6 @@ function ShopItemCard({ shopItemData }: Props) {
     <Link href={`item/${shopItemData.id}`}>
       <Card
         hoverable
-        style={{ width: 400 }}
         className="shadow-xl transition-transform hover:cursor-pointer"
         cover={
           <div className="h-72 overflow-hidden">

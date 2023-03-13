@@ -4,6 +4,7 @@ import Head from "next/head";
 import Link from "next/link";
 import React, { type PropsWithChildren, type ReactElement } from "react";
 import { UserOutlined } from "@ant-design/icons";
+import Cart from "../cart/Cart";
 
 const MainLayout: React.FC<PropsWithChildren> = ({ children }) => {
   const { data: sessionData } = useSession();
@@ -82,8 +83,9 @@ const MainLayout: React.FC<PropsWithChildren> = ({ children }) => {
             />
           </Dropdown>
         </Layout.Header>
-        <Layout.Content className="relative flex h-screen w-screen flex-col overflow-scroll">
-          {children}
+        <Layout.Content className="relative flex h-screen w-screen flex-col overflow-hidden">
+          <div className="overflow-scroll">{children}</div>
+          <Cart />
         </Layout.Content>
       </Layout>
     </>

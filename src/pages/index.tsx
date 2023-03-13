@@ -21,7 +21,7 @@ const Home: NextPage = () => {
       <div className="mx-auto">
         <Spin spinning={isLoading}>
           {shopItemsData?.length ? (
-            <div className="mx-12 mb-14 grid grid-cols-3 gap-10">
+            <div className="mx-4 mb-14 grid grid-cols-1 justify-items-stretch gap-5 sm:mx-12 sm:gap-10 md:grid-cols-2 xl:grid-cols-3 xl:gap-20">
               {shopItemsData.map((item) => (
                 <ShopItemCard key={item.id} shopItemData={item} />
               ))}
