@@ -48,6 +48,17 @@ model User {
     hashedPassword String?
     accounts       Account[]
     sessions       Session[]
+    address        Address?
+}
+
+model Address {
+    id           String @id @default(cuid())
+    userId       String @unique
+    user         User   @relation(fields: userId, references: id, onDelete: Cascade)
+    house_number String
+    street       String
+    phone        String
+    zip_code     String
 }
 
 model VerificationToken {
