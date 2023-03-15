@@ -59,6 +59,7 @@ model Address {
     street       String
     phone        String
     zip_code     String
+    city         String
 }
 
 model VerificationToken {
