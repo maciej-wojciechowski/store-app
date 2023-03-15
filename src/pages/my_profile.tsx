@@ -5,16 +5,26 @@ import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
 import { useForm } from "react-hook-form";
 import ControllerInput from "~/components/common/ControllerInput";
+import { api } from "~/utils/api";
 
 type AddressForm = Omit<Address, "id" | "userId">;
 
-const MyProfile: NextPage = (props) => {
+const MyProfile: NextPage = () => {
   const { data: sessionData } = useSession();
   const router = useRouter();
   const { handleSubmit, control } = useForm<AddressForm>();
 
+  const createOrUpdateAddress = api.user.createOrUpdateAddress.useMutation();
+
   const onSubmit = (data: AddressForm) => {
-    console.log({ data });
+    console.log({ data, sessionData }, sessionData?.user.id);
+    if (!sessionData?.user.id) {
+      throw new Error("user not present");
+    }
+    createOrUpdateAddress.mutate({
+      userId: sessionData.user.id,
+      addressData: data,
+    });
   };
 
   if (!sessionData?.user) {

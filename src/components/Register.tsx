@@ -1,8 +1,8 @@
 import React from "react";
 import { api } from "~/utils/api";
-import { Controller, useForm, type SubmitHandler } from "react-hook-form";
+import { useForm, type SubmitHandler } from "react-hook-form";
 import { signIn } from "next-auth/react";
-import { Button, Input, Form } from "antd";
+import { Button } from "antd";
 import ControllerInput from "./common/ControllerInput";
 
 type Inputs = {
