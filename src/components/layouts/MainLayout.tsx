@@ -24,32 +24,15 @@ const MainLayout: React.FC<PropsWithChildren> = ({ children }) => {
         ],
       };
     }
-    if (sessionData?.user.image) {
-      return {
-        avatar: (
-          <img
-            alt={sessionData.user.name || "user image"}
-            src={sessionData.user.image}
-          />
-        ),
-        menuItems: [
-          {
-            key: "1",
-            label: <Link href="#">My profile</Link>,
-          },
-          {
-            key: "2",
-            label: <span onClick={() => void signOut()}>Log out</span>,
-          },
-        ],
-      };
-    }
     return {
-      avatar: <UserOutlined className="text-xl" />,
+      avatar: !sessionData?.user.image ? <UserOutlined className="text-xl" /> :   <img
+      alt={sessionData.user.name || "user image"}
+      src={sessionData.user.image}
+    />,
       menuItems: [
         {
           key: "1",
-          label: <Link href="#">My profile</Link>,
+          label: <Link href="/my_profile">My profile</Link>,
         },
         {
           key: "2",
