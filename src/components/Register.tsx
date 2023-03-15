@@ -1,7 +1,9 @@
 import React from "react";
 import { api } from "~/utils/api";
-import { useForm, type SubmitHandler } from "react-hook-form";
+import { Controller, useForm, type SubmitHandler } from "react-hook-form";
 import { signIn } from "next-auth/react";
+import { Button, Input, Form } from "antd";
+import ControllerInput from "./common/ControllerInput";
 
 type Inputs = {
   name: string;
@@ -10,40 +12,67 @@ type Inputs = {
 };
 
 const Register = () => {
-  const {
-    register: registerForm,
-    handleSubmit,
-    formState: { errors },
-  } = useForm<Inputs>();
+  const { control, handleSubmit } = useForm<Inputs>();
 
   const registerUser = api.user.register.useMutation({
     onSuccess: async () => {
-      await signIn("credentials", {
-        callbackUrl: "login",
-      });
+      await signIn();
     },
   });
-  const onSubmit: SubmitHandler<Inputs> = (data) => {
+  const onSubmit: SubmitHandler<Inputs> = (data, e) => {
     registerUser.mutate(data);
   };
   return (
-    <div>
-      <form onSubmit={void handleSubmit(onSubmit)} className="flex flex-col">
-        <input
-          placeholder="name"
-          {...registerForm("name", { required: true })}
+    <div className="flex h-[90vh] items-center">
+      {/* eslint-disable-next-line @typescript-eslint/no-misused-promises */}
+      <form onSubmit={handleSubmit(onSubmit)} className="mx-auto flex flex-col">
+        <ControllerInput
+          label="Name"
+          controllerProps={{
+            name: "name",
+            control: control,
+            rules: {
+              required: "Required",
+              minLength: {
+                value: 6,
+                message: "Must be minimum 6 characters",
+              },
+            },
+          }}
         />
-        <input
-          placeholder="email"
-          type="email"
-          {...registerForm("email", { required: true })}
+        <ControllerInput
+          label="Email"
+          controllerProps={{
+            name: "email",
+            control: control,
+            rules: {
+              required: "Required",
+              pattern: {
+                value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
+                message: "Invalid email address",
+              },
+            },
+          }}
+          inputProps={{
+            placeholder: "Example@example.com",
+          }}
         />
-        <input
-          placeholder="password"
+        <ControllerInput
+          label="Password"
+          controllerProps={{
+            name: "password",
+            control: control,
+            rules: {
+              required: "Required",
+              minLength: {
+                value: 6,
+                message: "Must be minimum 6 characters",
+              },
+            },
+          }}
           type="password"
-          {...registerForm("password", { required: true })}
         />
-        <button type="submit">Register</button>
+        <Button htmlType="submit">Register</Button>
       </form>
     </div>
   );
