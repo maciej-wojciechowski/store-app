@@ -18,10 +18,7 @@ function ShopItemCard({ shopItemData }: Props) {
             <img
               className="mx-auto"
               alt={shopItemData.name}
-              src={
-                shopItemData.image ??
-                "https://raw.githubusercontent.com/koehlersimon/fallback/master/Resources/Public/Images/placeholder.jpg" //TODO
-              }
+              src={shopItemData.image ?? "/placeholder.jpeg"}
             />
           </div>
         }

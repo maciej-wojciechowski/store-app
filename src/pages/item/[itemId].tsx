@@ -47,7 +47,15 @@ const ItemPage: NextPage<
       />
       <div className="mx-auto my-10 max-w-4xl">
         <Button
-          onClick={() => addItem({ id: shopItem.id })}
+          onClick={() =>
+            addItem({
+              id: shopItem.id,
+              name: shopItem.name,
+              price: shopItem.price,
+              image: shopItem.image,
+              pcs: 1, // TODO
+            })
+          }
           className=" float-right bg-themeTurkish text-white "
         >
           Add to cart
