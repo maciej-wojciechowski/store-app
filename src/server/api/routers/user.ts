@@ -9,6 +9,9 @@ import {
 import { type Address } from "@prisma/client";
 
 export const userRouter = createTRPCRouter({
+  /**
+   * REGISTER
+   */
   register: publicProcedure
     .input(
       z.object({ name: z.string(), password: z.string(), email: z.string() })
@@ -23,15 +26,21 @@ export const userRouter = createTRPCRouter({
         },
       });
     }),
-  find: publicProcedure
+  /**
+   * GET USER DATA
+   */
+  getUser: publicProcedure
     .input(
       z.object({
-        email: z.string(),
+        userId: z.string(),
       })
     )
     .query(({ ctx, input }) => {
-      return ctx.prisma.user.findUnique({ where: { email: input.email } });
+      return ctx.prisma.user.findUnique({ where: { id: input.userId } });
     }),
+  /**
+   * CREATE OR UPDATE ADDRESS
+   */
   createOrUpdateAddress: protectedProcedure
     .input(
       z.object({
@@ -42,7 +51,6 @@ export const userRouter = createTRPCRouter({
           zip_code: z.optional(z.string()),
           city: z.optional(z.string()),
         }),
-        addressId: z.optional(z.string()),
         userId: z.string(),
       })
     )
@@ -53,19 +61,33 @@ export const userRouter = createTRPCRouter({
       // updating
       if (address) {
         return await ctx.prisma.address.update({
-          where: { id: address.id },
+          where: { userId: input.userId },
           data: input.addressData,
         });
       }
 
       //check if all values are present
-      const addressDataKeyValue = Object.values(input.addressData);
-      if (addressDataKeyValue.length !== 5) {
+      const addressDataValue = Object.values(input.addressData);
+      if (addressDataValue.length !== 5 || addressDataValue.some((v) => !v)) {
         throw new Error("Address fields cannot be empty");
       }
       // create
       return await ctx.prisma.address.create({
         data: { ...(input.addressData as Address), userId: input.userId },
+      });
+    }),
+  /**
+   * GET USER ADDRESS
+   */
+  getUserProfile: protectedProcedure
+    .input(
+      z.object({
+        userId: z.string(),
+      })
+    )
+    .query(({ ctx, input }) => {
+      return ctx.prisma.address.findUnique({
+        where: { userId: input.userId },
       });
     }),
 });
