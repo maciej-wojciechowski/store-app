@@ -23,7 +23,11 @@ export const useCartStore = create(
         let isPushed = false;
         state.items.forEach((el) => {
           if (el.id === item.id) {
-            el.pcs += item.pcs;
+            if (el.pcs + item.pcs < el.stock) {
+              el.pcs += item.pcs;
+            } else {
+              el.pcs = el.stock;
+            }
             isPushed = true;
           }
         });
