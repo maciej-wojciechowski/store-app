@@ -5,12 +5,12 @@ import { useCartStore } from "~/stores/cartStore";
 import CartItemsList from "./CartItemsList";
 
 const Cart = () => {
-  const { items, totalAmount } = useCartStore();
+  const { items } = useCartStore();
   return (
     <Popover
       placement="leftTop"
       trigger={"click"}
-      content={<CartItemsList items={items} totalAmount={totalAmount} />}
+      content={<CartItemsList items={items} />}
     >
       <Badge className="absolute bottom-8 right-8" count={items.length}>
         <Button

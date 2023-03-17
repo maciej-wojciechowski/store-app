@@ -1,11 +1,11 @@
 import { type ShopItem } from "@prisma/client";
-import { Button, Descriptions } from "antd";
+import { Button, Descriptions, InputNumber } from "antd";
 import {
   type GetServerSideProps,
   type NextPage,
   type InferGetServerSidePropsType,
 } from "next";
-import React from "react";
+import React, { useState } from "react";
 import { capitalizeKeys } from "~/helpers/stringHelpers";
 import { prisma } from "~/server/db";
 import { LeftOutlined } from "@ant-design/icons";
@@ -29,7 +29,18 @@ export const getServerSideProps: GetServerSideProps<
 const ItemPage: NextPage<
   InferGetServerSidePropsType<typeof getServerSideProps>
 > = ({ shopItem }) => {
-  const addItem = useCartStore((state) => state.addItem);
+  const [pcs, setPcs] = useState(1);
+
+  const { addItem, items } = useCartStore((state) => ({
+    addItem: state.addItem,
+    items: state.items,
+  }));
+
+  const currentItemPcsInCart =
+    items.find((el) => el.id === shopItem.id)?.pcs ?? 0;
+
+  const itemsLeft = shopItem.stock - currentItemPcsInCart;
+
   return (
     <div className="px-6">
       <div className="sticky top-0 py-6">
@@ -39,27 +50,39 @@ const ItemPage: NextPage<
       </div>
       <img
         className="mx-auto"
-        src={
-          shopItem.image ??
-          "https://raw.githubusercontent.com/koehlersimon/fallback/master/Resources/Public/Images/placeholder.jpg"
-        }
+        src={shopItem.image ?? "/placeholder.jpeg"}
         alt={shopItem.name}
       />
-      <div className="mx-auto my-10 max-w-4xl">
-        <Button
-          onClick={() =>
-            addItem({
-              id: shopItem.id,
-              name: shopItem.name,
-              price: shopItem.price,
-              image: shopItem.image,
-              pcs: 1, // TODO
-            })
-          }
-          className=" float-right bg-themeTurkish text-white "
-        >
-          Add to cart
-        </Button>
+      <div className="relative mx-auto my-10 max-w-4xl">
+        <div className="absolute right-0 flex justify-end">
+          <InputNumber
+            addonBefore={<span>pcs</span>}
+            className="mr-2 w-28"
+            min={1}
+            onChange={(val) => val && setPcs(val)}
+            disabled={itemsLeft <= 0}
+            max={itemsLeft}
+            value={pcs}
+          />
+          <Button
+            onClick={() => {
+              if (itemsLeft <= 0) {
+                return;
+              }
+              addItem({
+                id: shopItem.id,
+                name: shopItem.name,
+                price: shopItem.price,
+                image: shopItem.image,
+                stock: shopItem.stock,
+                pcs: pcs,
+              });
+            }}
+            className="bg-themeTurkish text-white "
+          >
+            Add to cart
+          </Button>
+        </div>
         <Descriptions
           className=""
           column={1}
