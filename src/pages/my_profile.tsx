@@ -7,6 +7,7 @@ import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import ControllerInput from "~/components/common/ControllerInput";
 import { api } from "~/utils/api";
+import { myNotification } from "~/utils/notification";
 
 type AddressForm = Omit<Address, "id" | "userId">;
 
@@ -32,7 +33,11 @@ const MyProfile: NextPage = () => {
     }
   }, [userData, resetForm]);
 
-  const createOrUpdateAddress = api.user.createOrUpdateAddress.useMutation();
+  const createOrUpdateAddress = api.user.createOrUpdateAddress.useMutation({
+    onSuccess: () => {
+      myNotification.success({ message: "Address updated" });
+    },
+  });
 
   const onSubmit = (data: AddressForm) => {
     if (!sessionData?.user.id) {

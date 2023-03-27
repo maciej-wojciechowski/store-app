@@ -1,6 +1,7 @@
 import { type ShopItem } from "@prisma/client";
 import { create } from "zustand";
 import { immer } from "zustand/middleware/immer";
+import { myNotification } from "~/utils/notification";
 
 export type CartItem = Pick<
   ShopItem,
@@ -34,6 +35,10 @@ export const useCartStore = create(
         if (!isPushed) {
           state.items.push(item);
         }
+        myNotification.success({
+          message: "Item added to cart",
+          placement: "topRight",
+        });
       }),
     changeItemPcs: (itemId, pcs) =>
       set((state) => {
