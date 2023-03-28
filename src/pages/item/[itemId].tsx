@@ -29,7 +29,7 @@ export const getServerSideProps: GetServerSideProps<
 const ItemPage: NextPage<
   InferGetServerSidePropsType<typeof getServerSideProps>
 > = ({ shopItem }) => {
-  const [pcs, setPcs] = useState(1);
+  const [qty, setQty] = useState(1);
 
   const { addItem, items } = useCartStore((state) => ({
     addItem: state.addItem,
@@ -37,7 +37,7 @@ const ItemPage: NextPage<
   }));
 
   const currentItemPcsInCart =
-    items.find((el) => el.id === shopItem.id)?.pcs ?? 0;
+    items.find((el) => el.id === shopItem.id)?.qty ?? 0;
 
   const itemsLeft = shopItem.stock - currentItemPcsInCart;
 
@@ -56,13 +56,13 @@ const ItemPage: NextPage<
       <div className="relative mx-auto my-10 max-w-4xl">
         <div className="absolute right-0 flex justify-end">
           <InputNumber
-            addonBefore={<span>pcs</span>}
+            addonBefore={<span>Qty</span>}
             className="mr-2 w-28"
             min={1}
-            onChange={(val) => val && setPcs(val)}
+            onChange={(val) => val && setQty(val)}
             disabled={itemsLeft <= 0}
             max={itemsLeft}
-            value={pcs}
+            value={qty}
           />
           <Button
             onClick={() => {
@@ -75,7 +75,7 @@ const ItemPage: NextPage<
                 price: shopItem.price,
                 image: shopItem.image,
                 stock: shopItem.stock,
-                pcs: pcs,
+                qty: qty,
               });
             }}
             type="primary"

@@ -7,14 +7,14 @@ export type CartItem = Pick<
   ShopItem,
   "id" | "name" | "price" | "image" | "stock"
 > & {
-  pcs: number;
+  qty: number;
 };
 
 interface CartStore {
   items: CartItem[];
   addItem: (item: CartItem) => void;
   deleteItem: (itemId: string) => void;
-  changeItemPcs: (itemId: string, pcs: number) => void;
+  changeItemQty: (itemId: string, qty: number) => void;
 }
 
 export const useCartStore = create(
@@ -25,10 +25,10 @@ export const useCartStore = create(
         let isPushed = false;
         state.items.forEach((el) => {
           if (el.id === item.id) {
-            if (el.pcs + item.pcs < el.stock) {
-              el.pcs += item.pcs;
+            if (el.qty + item.qty < el.stock) {
+              el.qty += item.qty;
             } else {
-              el.pcs = el.stock;
+              el.qty = el.stock;
             }
             isPushed = true;
           }
@@ -46,11 +46,11 @@ export const useCartStore = create(
       set((state) => {
         state.items = state.items.filter((el) => el.id !== itemId);
       }),
-    changeItemPcs: (itemId, pcs) =>
+    changeItemQty: (itemId, qty) =>
       set((state) => {
         state.items.forEach((el) => {
           if (el.id === itemId) {
-            el.pcs = pcs;
+            el.qty = qty;
           }
         });
       }),

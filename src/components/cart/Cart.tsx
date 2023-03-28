@@ -11,7 +11,7 @@ const Cart = () => {
   return (
     <Popover
       placement="leftTop"
-      trigger={"click"}
+      trigger="click"
       content={
         <div className="relative w-96">
           <CartItemsList

@@ -9,12 +9,12 @@ const CartItemsList = ({
   items: CartItem[];
   listClassName?: string;
 }) => {
-  const { changeItemPcs, deleteItem } = useCartStore((state) => ({
-    changeItemPcs: state.changeItemPcs,
+  const { changeItemQty, deleteItem } = useCartStore((state) => ({
+    changeItemQty: state.changeItemQty,
     deleteItem: state.deleteItem,
   }));
   const totalAmount = items.reduce((prev, curr) => {
-    prev += curr.pcs * curr.price;
+    prev += curr.qty * curr.price;
     return prev;
   }, 0);
   return (
@@ -31,9 +31,9 @@ const CartItemsList = ({
                 className="mr-2 w-24"
                 min={0}
                 max={item.stock}
-                onChange={(val) => val && changeItemPcs(item.id, val)}
-                addonBefore={<span>pcs</span>}
-                value={item.pcs}
+                onChange={(val) => val && changeItemQty(item.id, val)}
+                addonBefore={<span>Qty</span>}
+                value={item.qty}
               />
               <Button
                 className="mr-2"
