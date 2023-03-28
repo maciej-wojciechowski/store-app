@@ -13,6 +13,7 @@ export type CartItem = Pick<
 interface CartStore {
   items: CartItem[];
   addItem: (item: CartItem) => void;
+  deleteItem: (itemId: string) => void;
   changeItemPcs: (itemId: string, pcs: number) => void;
 }
 
@@ -36,9 +37,14 @@ export const useCartStore = create(
           state.items.push(item);
         }
         myNotification.success({
-          message: "Item added to cart",
+          message: "Success",
+          description: "Item added to cart",
           placement: "topRight",
         });
+      }),
+    deleteItem: (itemId) =>
+      set((state) => {
+        state.items = state.items.filter((el) => el.id !== itemId);
       }),
     changeItemPcs: (itemId, pcs) =>
       set((state) => {
