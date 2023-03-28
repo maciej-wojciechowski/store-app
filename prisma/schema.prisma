@@ -85,9 +85,9 @@ model ShopItem {
 
 model OrderItem {
     id         String   @id @unique @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
-    orderId    String
+    orderId    String   @db.Uuid
     order      Order    @relation(fields: [orderId], references: [id], onDelete: Cascade)
-    shopItemId String
+    shopItemId String   @db.Uuid
     shopItem   ShopItem @relation(fields: [shopItemId], references: [id], onDelete: Cascade)
     quantity   Int
     price      Float
