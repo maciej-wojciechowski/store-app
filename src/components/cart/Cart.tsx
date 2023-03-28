@@ -19,7 +19,8 @@ const Cart = () => {
             listClassName="max-h-[300px] overflow-auto"
           />
           <Button
-            className="absolute right-0 bottom-0 bg-themeTurkish text-white"
+            className="absolute right-0 bottom-0"
+            type="primary"
             disabled={!items.length}
             onClick={() => void router.push("/checkout")}
           >

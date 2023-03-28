@@ -78,7 +78,7 @@ const ItemPage: NextPage<
                 pcs: pcs,
               });
             }}
-            className="bg-themeTurkish text-white "
+            type="primary"
           >
             Add to cart
           </Button>

@@ -13,6 +13,7 @@ const config = {
     },
   },
   plugins: [],
+  corePlugins: {},
 };
 
 module.exports = config;
