@@ -49,16 +49,18 @@ model User {
     accounts       Account[]
     sessions       Session[]
     address        Address?
+    Order          Order[]
 }
 
 model Address {
-    userId       String @id @unique
-    user         User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+    userId       String  @id @unique
+    user         User    @relation(fields: [userId], references: [id], onDelete: Cascade)
     house_number String
     street       String
     phone        String
     zip_code     String
     city         String
+    Order        Order[]
 }
 
 model VerificationToken {
@@ -70,14 +72,38 @@ model VerificationToken {
 }
 
 model ShopItem {
-    id          String   @id @unique @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+    id          String      @id @unique @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
     name        String
     description String
     price       Float
     stock       Int
     image       String?
-    category    Category @default(others)
-    producer    Producer @default(other)
+    category    Category    @default(others)
+    producer    Producer    @default(other)
+    OrderItem   OrderItem[]
+}
+
+model OrderItem {
+    id         String   @id @unique @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+    orderId    String
+    order      Order    @relation(fields: [orderId], references: [id], onDelete: Cascade)
+    shopItemId String
+    shopItem   ShopItem @relation(fields: [shopItemId], references: [id], onDelete: Cascade)
+    quantity   Int
+    price      Float
+}
+
+model Order {
+    id            String      @id @unique @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+    userId        String
+    user          User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+    items         OrderItem[]
+    createdAt     DateTime    @default(now())
+    updatedAt     DateTime    @updatedAt
+    status        OrderStatus
+    totalPrice    Float
+    address       Address     @relation(fields: [addressUserId], references: [userId])
+    addressUserId String
 }
 
 enum Category {
@@ -98,4 +124,12 @@ enum Producer {
     medium_producer
     so_so_producer
     other
+}
+
+enum OrderStatus {
+    pending
+    processing
+    shipped
+    delivered
+    canceled
 }
