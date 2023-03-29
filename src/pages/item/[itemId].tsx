@@ -55,6 +55,9 @@ const ItemPage: NextPage<
       />
       <div className="relative mx-auto my-10 max-w-4xl">
         <div className="absolute right-0 flex justify-end">
+          {itemsLeft <= 0 && (
+            <span className="mr-2 self-center">Out of stock</span>
+          )}
           <InputNumber
             addonBefore={<span>Qty</span>}
             className="mr-2 w-28"
@@ -65,6 +68,7 @@ const ItemPage: NextPage<
             value={qty}
           />
           <Button
+            disabled={itemsLeft <= 0}
             onClick={() => {
               if (itemsLeft <= 0) {
                 return;
