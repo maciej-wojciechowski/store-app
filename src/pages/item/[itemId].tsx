@@ -1,5 +1,5 @@
 import { type ShopItem } from "@prisma/client";
-import { Button, Descriptions, InputNumber } from "antd";
+import { Button, Carousel, Descriptions, InputNumber } from "antd";
 import {
   type GetServerSideProps,
   type NextPage,
@@ -43,16 +43,32 @@ const ItemPage: NextPage<
 
   return (
     <div className="px-6">
-      <div className="sticky top-0 py-6">
+      <div className="sticky top-0 z-10 py-6">
         <Link href="/">
           <Button icon={<LeftOutlined />}></Button>
         </Link>
       </div>
-      <img
-        className="mx-auto"
-        src={shopItem.image ?? "/placeholder.jpeg"}
-        alt={shopItem.name}
-      />
+      <Carousel centerMode className="[&_.slick-dots_button]:!bg-themeTurkish">
+        {!shopItem.images.length ? (
+          <div>
+            <img
+              className="mx-auto max-h-96 w-auto"
+              src="/placeholder.jpeg"
+              alt={shopItem.name}
+            />
+          </div>
+        ) : (
+          shopItem.images.map((image, index) => (
+            <div className="!flex h-[600px] justify-center" key={index}>
+              <img
+                className="max-h-min object-scale-down"
+                src={image}
+                alt={shopItem.name + String(index)}
+              />
+            </div>
+          ))
+        )}
+      </Carousel>
       <div className="relative mx-auto my-10 max-w-4xl">
         <div className="absolute right-0 flex justify-end">
           {itemsLeft <= 0 && (
@@ -77,7 +93,7 @@ const ItemPage: NextPage<
                 id: shopItem.id,
                 name: shopItem.name,
                 price: shopItem.price,
-                image: shopItem.image,
+                image: shopItem.images[0] ?? "/placeholder.jpeg",
                 stock: shopItem.stock,
                 qty: qty,
               });

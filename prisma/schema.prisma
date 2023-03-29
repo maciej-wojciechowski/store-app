@@ -76,7 +76,7 @@ model ShopItem {
     description String
     price       Float
     stock       Int
-    image       String?
+    images      String[]    @default([])
     category    Category    @default(others)
     producer    Producer    @default(other)
     OrderItem   OrderItem[]

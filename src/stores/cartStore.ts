@@ -3,11 +3,9 @@ import { create } from "zustand";
 import { immer } from "zustand/middleware/immer";
 import { myNotification } from "~/utils/notification";
 
-export type CartItem = Pick<
-  ShopItem,
-  "id" | "name" | "price" | "image" | "stock"
-> & {
+export type CartItem = Pick<ShopItem, "id" | "name" | "price" | "stock"> & {
   qty: number;
+  image: string;
 };
 
 interface CartStore {
