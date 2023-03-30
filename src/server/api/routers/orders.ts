@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { getDeliveryCostWithKey } from "~/helpers/selectsHelpers";
 import { createTRPCRouter, protectedProcedure } from "~/server/api/trpc";
 
 export const orderRouter = createTRPCRouter({
@@ -7,22 +8,29 @@ export const orderRouter = createTRPCRouter({
       z.object({
         userId: z.string(),
         orderItems: z.array(z.object({ id: z.string(), quantity: z.number() })),
+        delivery: z.enum(["post", "courier", "pickup"]),
+        address: z.optional(z.string()),
       })
     )
     .mutation(async ({ ctx, input }) => {
-      // get address
-      const address = await ctx.prisma.address.findUnique({
-        where: { userId: input.userId },
-      });
+      let address = input.address;
+      // get address if not provided
       if (!address) {
-        throw new Error("User has no address");
+        const userAddress = await ctx.prisma.address.findUnique({
+          where: { userId: input.userId },
+        });
+        if (!userAddress) {
+          throw new Error("User has no address");
+        }
+        address = Object.values(userAddress).join(",");
       }
       // get shop items
       const shopItems = await ctx.prisma.shopItem.findMany({
         where: { id: { in: input.orderItems.map((item) => item.id) } },
       });
-      // total price
-      let totalPrice = 0;
+      // total price - start with delivery cost
+      let totalPrice = getDeliveryCostWithKey(input.delivery).cost;
+
       // order items
       const items = input.orderItems.map((item) => {
         const shopItem = shopItems.find((i) => i.id === item.id);
@@ -53,8 +61,9 @@ export const orderRouter = createTRPCRouter({
           items: {
             create: items,
           },
-          address: Object.values(address).join(","),
+          address,
           totalPrice: totalPrice,
+          delivery: input.delivery,
         },
       });
     }),

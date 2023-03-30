@@ -5,18 +5,25 @@ import { useCartStore, type CartItem } from "~/stores/cartStore";
 const CartItemsList = ({
   items,
   listClassName,
+  addToTotalAmount = 0,
+  children,
 }: {
   items: CartItem[];
   listClassName?: string;
+  children?: React.ReactNode;
+  addToTotalAmount?: number;
 }) => {
   const { changeItemQty, deleteItem } = useCartStore((state) => ({
     changeItemQty: state.changeItemQty,
     deleteItem: state.deleteItem,
   }));
-  const totalAmount = items.reduce((prev, curr) => {
+
+  let totalAmount = items.reduce((prev, curr) => {
     prev += curr.qty * curr.price;
     return prev;
   }, 0);
+
+  totalAmount += addToTotalAmount;
   return (
     <>
       <div className={listClassName}>
@@ -49,6 +56,7 @@ const CartItemsList = ({
           )}
         />
       </div>
+      {children}
       <Statistic title="Total amount (PLN)" value={totalAmount} />
     </>
   );
