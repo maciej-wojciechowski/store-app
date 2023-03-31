@@ -47,12 +47,9 @@ const ControllerInput = ({
       {...controllerProps}
       render={({ field, fieldState }) => {
         return (
-          <div className="relative min-h-[45px] w-full">
+          <div className="mb-1 min-h-[55px] w-full">
             {label ? (
-              <label
-                className="absolute right-[calc(100%+4px)] top-0 whitespace-nowrap"
-                htmlFor={controllerProps.name}
-              >
+              <label className="mt-5" htmlFor={controllerProps.name}>
                 {label + ":"}
               </label>
             ) : null}

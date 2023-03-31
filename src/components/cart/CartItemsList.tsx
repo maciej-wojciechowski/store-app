@@ -33,6 +33,7 @@ const CartItemsList = ({
             <List.Item>
               <span>{String(index + 1) + "."}</span>
               <span className="ml-2 flex-grow">{item.name}</span>
+              <span className="mr-2">{item.price * item.qty} PLN</span>
               <InputNumber
                 size="small"
                 className="mr-2 w-24"

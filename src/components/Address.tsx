@@ -9,7 +9,7 @@ export type AddressForm = Omit<Address, "id" | "userId">;
 type Props = {
   control: Control<AddressForm>;
   handleSubmitPromise?: (e: BaseSyntheticEvent) => Promise<void>;
-  isDirty: boolean;
+  isDirty?: boolean;
   noBtn?: boolean;
 };
 
@@ -60,7 +60,7 @@ function Address({ control, handleSubmitPromise, isDirty, noBtn }: Props) {
           }}
         />
         {noBtn ? null : (
-          <Button disabled={!isDirty} htmlType="submit">
+          <Button disabled={!isDirty} className="mt-2" htmlType="submit">
             Update address
           </Button>
         )}
