@@ -3,6 +3,28 @@ import { getDeliveryCostWithKey } from "~/helpers/selectsHelpers";
 import { createTRPCRouter, protectedProcedure } from "~/server/api/trpc";
 
 export const orderRouter = createTRPCRouter({
+  // GET USER ORDERS LIST
+  getUserOrderList: protectedProcedure
+    .input(z.string())
+    .query(async ({ ctx, input }) => {
+      return ctx.prisma.order.findMany({
+        where: { userId: input },
+        select: { id: true, createdAt: true, totalPrice: true, status: true },
+        orderBy: { createdAt: "desc" },
+      });
+    }),
+  // GET ORDER
+  getOrderById: protectedProcedure
+    .input(z.string())
+    .query(async ({ ctx, input }) => {
+      return ctx.prisma.order.findUnique({
+        where: { id: input },
+        include: {
+          items: true,
+        },
+      });
+    }),
+  // CREATE
   create: protectedProcedure
     .input(
       z.object({

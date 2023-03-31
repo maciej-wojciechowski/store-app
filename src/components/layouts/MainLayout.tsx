@@ -25,17 +25,25 @@ const MainLayout: React.FC<PropsWithChildren> = ({ children }) => {
       };
     }
     return {
-      avatar: !sessionData?.user.image ? <UserOutlined className="text-xl" /> :   <img
-      alt={sessionData.user.name || "user image"}
-      src={sessionData.user.image}
-    />,
+      avatar: !sessionData?.user.image ? (
+        <UserOutlined className="text-xl" />
+      ) : (
+        <img
+          alt={sessionData.user.name || "user image"}
+          src={sessionData.user.image}
+        />
+      ),
       menuItems: [
         {
           key: "1",
-          label: <Link href="/my_profile">My profile</Link>,
+          label: <Link href="/me/my_profile">Profile</Link>,
         },
         {
           key: "2",
+          label: <Link href="/me/my_orders">Orders</Link>,
+        },
+        {
+          key: "3",
           label: <span onClick={() => void signOut()}>Log out</span>,
         },
       ],
