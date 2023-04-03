@@ -76,7 +76,7 @@ function Address({ control, handleSubmitPromise, isDirty, noBtn }: Props) {
             rules: {
               required: "Required",
               pattern: {
-                value: /^[a-zA-Z]+$/,
+                value: /^[a-zA-Ząćęłńóśźż]+$/,
                 message: "Must contain only letters",
               },
             },
@@ -91,7 +91,7 @@ function Address({ control, handleSubmitPromise, isDirty, noBtn }: Props) {
             rules: {
               required: "Required",
               pattern: {
-                value: /^[a-zA-Z]+$/,
+                value: /^[a-zA-Ząćęłńóśźż]+$/,
                 message: "Must contain only letters",
               },
             },
