@@ -5,6 +5,7 @@ import Link from "next/link";
 import React, { type PropsWithChildren, type ReactElement } from "react";
 import { UserOutlined } from "@ant-design/icons";
 import Cart from "../cart/Cart";
+import { ThunderboltTwoTone } from "@ant-design/icons";
 
 const MainLayout: React.FC<PropsWithChildren> = ({ children }) => {
   const { data: sessionData } = useSession();
@@ -62,7 +63,8 @@ const MainLayout: React.FC<PropsWithChildren> = ({ children }) => {
       </Head>
       <Layout className="h-[100vh] overflow-hidden">
         <Layout.Header className="flex items-center bg-themeGrey text-themeWhite">
-          <Link href={"/"}>
+          <Link className="flex" href={"/"}>
+            <ThunderboltTwoTone color="white" className="mx-2 text-2xl" />
             <span>Store</span>
           </Link>
           <div className="flex-1" />

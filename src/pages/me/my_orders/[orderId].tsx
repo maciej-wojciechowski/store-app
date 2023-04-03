@@ -1,5 +1,7 @@
 import { OrderItem } from "@prisma/client";
-import { Descriptions, Divider, List, Spin } from "antd";
+import { LeftOutlined } from "@ant-design/icons";
+import { Button, Descriptions, Divider, List, Spin } from "antd";
+import Link from "next/link";
 import { useRouter } from "next/router";
 import { api } from "~/utils/api";
 
@@ -52,8 +54,14 @@ const OrderPage = () => {
 
   return (
     <div>
-      <div className="m-10 mx-auto max-w-[600px]">
-        <Descriptions className="mb-10" title="Order Info" bordered column={1}>
+      <div className="sticky top-0 z-10 p-6">
+        <Link href="/me/my_orders">
+          <Button icon={<LeftOutlined />}></Button>
+        </Link>
+      </div>
+      <div className="mx-auto mb-10 max-w-[600px]">
+        <Divider orientation="left">Order info</Divider>
+        <Descriptions className="mt-8 mb-10" bordered column={1}>
           <Descriptions.Item label="Order ID">
             {orderData?.id}
           </Descriptions.Item>
@@ -78,7 +86,6 @@ const OrderPage = () => {
         <Divider orientation="left">Order items</Divider>
         <List
           dataSource={orderData?.items}
-          className=""
           renderItem={(item, index) => {
             return <OrderItem orderItem={item} key={item.id} index={index} />;
           }}
