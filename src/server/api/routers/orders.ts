@@ -44,7 +44,15 @@ export const orderRouter = createTRPCRouter({
         if (!userAddress) {
           throw new Error("User has no address");
         }
-        address = Object.values(userAddress).join(",");
+        // remove userID from address
+        address = Object.entries(userAddress)
+          .reduce((acc, [key, value]) => {
+            if (key !== "userId") {
+              acc.push(value);
+            }
+            return acc;
+          }, [] as string[])
+          .join(",");
       }
       // get shop items
       const shopItems = await ctx.prisma.shopItem.findMany({
