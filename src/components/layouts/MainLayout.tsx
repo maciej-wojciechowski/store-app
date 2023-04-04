@@ -67,11 +67,11 @@ const MainLayout: React.FC<Props> = ({ children, customFont }) => {
       <Layout className={`h-[100vh] overflow-hidden ${customFont.variable}`}>
         <Layout.Header className="flex items-center bg-themeGrey text-themeWhite">
           <Link className="flex" href="/">
-            <span className="self-center font-barcelony text-2xl">Store</span>
+            {/* <span className="self-center font-barcelony text-2xl">Store</span>
             <ThunderboltTwoTone
               twoToneColor="#22A39F"
               className="ml-1 text-5xl"
-            />
+            /> */}
           </Link>
           <div className="flex-1" />
           <Dropdown menu={{ items: menuItems }} trigger={["click"]}>

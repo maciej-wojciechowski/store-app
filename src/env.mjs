@@ -7,6 +7,8 @@ import { z } from "zod";
 const server = z.object({
   DATABASE_URL: z.string().url(),
   NODE_ENV: z.enum(["development", "test", "production"]),
+  DATABASE_API_KEY: z.string().min(1),
+  DATABASE_API_URL: z.string().min(1),
   NEXTAUTH_SECRET:
     process.env.NODE_ENV === "production"
       ? z.string().min(1)
@@ -40,6 +42,8 @@ const client = z.object({
 const processEnv = {
   DATABASE_URL: process.env.DATABASE_URL,
   NODE_ENV: process.env.NODE_ENV,
+  DATABASE_API_KEY: process.env.DATABASE_API_KEY,
+  DATABASE_API_URL: process.env.DATABASE_API_URL,
   NEXTAUTH_SECRET: process.env.NEXTAUTH_SECRET,
   NEXTAUTH_URL: process.env.NEXTAUTH_URL,
   GITHUB_CLIENT_ID: process.env.GITHUB_CLIENT_ID,

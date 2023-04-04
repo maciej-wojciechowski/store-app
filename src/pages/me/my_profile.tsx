@@ -1,11 +1,89 @@
-import { Typography } from "antd";
+import { Button, Typography, Upload } from "antd";
+import { LoadingOutlined, PlusOutlined } from "@ant-design/icons";
+import {
+  type RcFile,
+  type UploadChangeParam,
+  type UploadFile,
+  type UploadProps,
+} from "antd/es/upload";
 import { type NextPage } from "next";
 import { useSession } from "next-auth/react";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import Address, { type AddressForm } from "~/components/Address";
 import { api } from "~/utils/api";
 import { myNotification } from "~/utils/notification";
+import { supabase } from "~/utils/supabase";
+
+const getBase64 = (img: RcFile, callback: (url: string) => void) => {
+  const reader = new FileReader();
+  reader.addEventListener("load", () => callback(reader.result as string));
+  reader.readAsDataURL(img);
+};
+
+const AvatarForm = ({ userId }: { userId?: string }) => {
+  const [loading, setLoading] = useState(false);
+  const [file, setFile] = useState<RcFile>();
+  const [imageUrl, setImageUrl] = useState<string>();
+
+  const uploadButton = (
+    <div className="flex h-5 flex-col items-center justify-between">
+      {loading ? <LoadingOutlined /> : <PlusOutlined />}
+      <span>Choose avatar</span>
+    </div>
+  );
+
+  const handleChange: UploadProps["onChange"] = ({
+    file,
+  }: UploadChangeParam<UploadFile>) => {
+    if (file.status === "uploading") {
+      setLoading(true);
+      return;
+    }
+    if (file.status === "done") {
+      setFile(file.originFileObj as RcFile);
+      // Get this url from response in real world.
+      getBase64(file.originFileObj as RcFile, (url) => {
+        setLoading(false);
+        setImageUrl(url);
+      });
+    }
+    if (file.status === "removed") {
+      setImageUrl(undefined);
+      setFile(undefined);
+    }
+  };
+  // send avatar to supabase
+  const sendAvatar = async () => {
+    if (!file || !userId) {
+      return;
+    }
+    const { data, error } = await supabase.storage
+      .from("avatars")
+      .upload(userId + "_pic", file);
+    console.log({ data, error });
+    // const formData = new FormData();
+    // formData.append(userId + "_pic", file);
+  };
+
+  return (
+    <>
+      <Upload
+        showUploadList={false}
+        maxCount={1}
+        listType="picture-card"
+        onChange={handleChange}
+      >
+        {imageUrl ? (
+          <img src={imageUrl} className="mx-auto max-w-[50%]" alt="avatar" />
+        ) : (
+          uploadButton
+        )}
+      </Upload>
+      {file && <Button onClick={() => void sendAvatar()}>Send avatar</Button>}
+    </>
+  );
+};
 
 const MyProfile: NextPage = () => {
   const { data: sessionData } = useSession();
@@ -51,12 +129,15 @@ const MyProfile: NextPage = () => {
   };
 
   if (!sessionData?.user) {
-    return <div>{"You're not logged in"}</div>;
+    return <div>You&aposre not logged in</div>;
   }
 
   return (
     <div className="flex h-[90vh] flex-col items-center justify-center">
       <Typography.Title level={4}>My profile</Typography.Title>
+      <div className="my-4">
+        <AvatarForm userId={sessionData?.user.id} />
+      </div>
       <Address
         isDirty={isDirty}
         control={control}
