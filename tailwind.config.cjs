@@ -10,6 +10,9 @@ const config = {
         themeGrey: "#434242",
         themeWhite: "#F3EFE0",
       },
+      fontFamily: {
+        barcelony: ["var(--font-barcelony)"],
+      },
     },
   },
   plugins: [],

@@ -13,6 +13,7 @@ interface CartStore {
   addItem: (item: CartItem) => void;
   deleteItem: (itemId: string) => void;
   changeItemQty: (itemId: string, qty: number) => void;
+  emptyCart: () => void;
 }
 
 export const useCartStore = create(
@@ -51,6 +52,10 @@ export const useCartStore = create(
             el.qty = qty;
           }
         });
+      }),
+    emptyCart: () =>
+      set((state) => {
+        state.items = [];
       }),
   }))
 );

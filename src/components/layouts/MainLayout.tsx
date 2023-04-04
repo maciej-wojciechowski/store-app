@@ -6,8 +6,11 @@ import React, { type PropsWithChildren, type ReactElement } from "react";
 import { UserOutlined } from "@ant-design/icons";
 import Cart from "../cart/Cart";
 import { ThunderboltTwoTone } from "@ant-design/icons";
+import { type NextFontWithVariable } from "next/dist/compiled/@next/font";
 
-const MainLayout: React.FC<PropsWithChildren> = ({ children }) => {
+type Props = PropsWithChildren & { customFont: NextFontWithVariable };
+
+const MainLayout: React.FC<Props> = ({ children, customFont }) => {
   const { data: sessionData } = useSession();
 
   const getLogoMenuItemsAndAvatar: () => {
@@ -61,11 +64,14 @@ const MainLayout: React.FC<PropsWithChildren> = ({ children }) => {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <Layout className="h-[100vh] overflow-hidden">
+      <Layout className={`h-[100vh] overflow-hidden ${customFont.variable}`}>
         <Layout.Header className="flex items-center bg-themeGrey text-themeWhite">
-          <Link className="flex" href={"/"}>
-            <ThunderboltTwoTone color="white" className="mx-2 text-2xl" />
-            <span>Store</span>
+          <Link className="flex" href="/">
+            <span className="self-center font-barcelony text-2xl">Store</span>
+            <ThunderboltTwoTone
+              twoToneColor="#22A39F"
+              className="ml-1 text-5xl"
+            />
           </Link>
           <div className="flex-1" />
           <Dropdown menu={{ items: menuItems }} trigger={["click"]}>

@@ -1,6 +1,7 @@
-import { Button, Descriptions, Radio, Select, Typography } from "antd";
+import { Button, Descriptions, message, Radio, Select, Typography } from "antd";
 import { type NextPage } from "next";
 import { useSession } from "next-auth/react";
+import { useRouter } from "next/router";
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import Address, { type AddressForm } from "~/components/Address";
@@ -19,9 +20,22 @@ const DEFAULT_DELIVERY = getDeliveryCostWithKey("post");
 
 const Checkout: NextPage = () => {
   const { data: sessionData } = useSession();
-  const { items } = useCartStore();
+  const { items, emptyCart } = useCartStore();
+  const router = useRouter();
+  const [messageApi, contextHolder] = message.useMessage();
 
-  const createOrder = api.order.create.useMutation();
+  const createOrder = api.order.create.useMutation({
+    onError: () =>
+      void messageApi.error({
+        content: "Error while creating order",
+      }),
+    onSuccess: () => {
+      void messageApi.success({ content: "Order created" }).then(() => {
+        emptyCart();
+        void router.push("me/my_orders");
+      });
+    },
+  });
   const address = api.user.getUserProfile.useQuery(
     { userId: sessionData?.user.id ?? "" },
     { enabled: !!sessionData?.user }
@@ -47,6 +61,9 @@ const Checkout: NextPage = () => {
       await triggerForm(
         // success form
         (data) => {
+          void messageApi.loading({
+            content: "Creating order...",
+          });
           createOrder.mutate({
             ...payload,
             address: Object.values(data).join(","),
@@ -71,6 +88,7 @@ const Checkout: NextPage = () => {
 
   return (
     <div className="p-4">
+      {contextHolder}
       <Typography.Title className="text-center" level={3}>
         Checkout
       </Typography.Title>

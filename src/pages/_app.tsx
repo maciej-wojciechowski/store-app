@@ -9,6 +9,13 @@ import "~/styles/globals.css";
 import MainLayout from "~/components/layouts/MainLayout";
 import { ConfigProvider } from "antd";
 
+import localFont from "next/font/local";
+
+const barcelonyFont = localFont({
+  src: "../../public/Barcelony.ttf",
+  variable: "--font-barcelony",
+});
+
 const MyApp: AppType<{ session: Session | null }> = ({
   Component,
   pageProps: { session, ...pageProps },
@@ -22,7 +29,7 @@ const MyApp: AppType<{ session: Session | null }> = ({
           },
         }}
       >
-        <MainLayout>
+        <MainLayout customFont={barcelonyFont}>
           <ReactQueryDevtools initialIsOpen={false} />
           <Component {...pageProps} />
         </MainLayout>
