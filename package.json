@@ -18,7 +18,7 @@
     "@trpc/next": "^10.9.0",
     "@trpc/react-query": "^10.9.0",
     "@trpc/server": "^10.9.0",
-    "antd": "^5.2.3",
+    "antd": "^5.4.0",
     "bcrypt": "^5.1.0",
     "immer": "^9.0.19",
     "next": "13.2.1",
