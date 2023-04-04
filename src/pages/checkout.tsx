@@ -139,9 +139,7 @@ const Checkout: NextPage = () => {
                 </Descriptions>
               </div>
             ) : (
-              <div className="">
-                <Address control={control} noBtn={true} />
-              </div>
+              <Address control={control} noBtn={true} />
             )}
           </div>
         </CartItemsList>
