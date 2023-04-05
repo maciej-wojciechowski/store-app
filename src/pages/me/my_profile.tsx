@@ -13,7 +13,6 @@ import { useForm } from "react-hook-form";
 import Address, { type AddressForm } from "~/components/Address";
 import { api } from "~/utils/api";
 import { myNotification } from "~/utils/notification";
-import { supabase } from "~/utils/supabase";
 
 const getBase64 = (img: RcFile, callback: (url: string) => void) => {
   const reader = new FileReader();
@@ -53,18 +52,26 @@ const AvatarForm = ({ userId }: { userId?: string }) => {
       setFile(undefined);
     }
   };
-  // send avatar to supabase
-  const sendAvatar = async () => {
+
+  async function sendAvatar(): Promise<void> {
     if (!file || !userId) {
       return;
     }
-    const { data, error } = await supabase.storage
-      .from("avatars")
-      .upload(userId + "_pic", file);
-    console.log({ data, error });
-    // const formData = new FormData();
-    // formData.append(userId + "_pic", file);
-  };
+    const apiUrl = "/api/avatar/" + encodeURIComponent(userId);
+    const formData = new FormData();
+    formData.append("file", file);
+
+    try {
+      const response = await fetch(apiUrl, {
+        method: "POST",
+        body: formData,
+      });
+
+      console.log(response);
+    } catch (error) {
+      console.error(error);
+    }
+  }
 
   return (
     <>
