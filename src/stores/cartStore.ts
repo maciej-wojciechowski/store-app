@@ -10,6 +10,7 @@ export type CartItem = Pick<ShopItem, "id" | "name" | "price" | "stock"> & {
 
 interface CartStore {
   items: CartItem[];
+  setItems: (items: CartItem[]) => void;
   addItem: (item: CartItem) => void;
   deleteItem: (itemId: string) => void;
   changeItemQty: (itemId: string, qty: number) => void;
@@ -19,6 +20,10 @@ interface CartStore {
 export const useCartStore = create(
   immer<CartStore>((set) => ({
     items: [],
+    setItems: (items) =>
+      set((state) => {
+        state.items = items;
+      }),
     addItem: (item) =>
       set((state) => {
         let isPushed = false;

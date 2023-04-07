@@ -80,15 +80,16 @@ export default async function handler(
                 .status(500)
                 .json({ message: "Error during avatar update" });
             }
-            return res.status(205).json({
+            return res.status(200).json({
               message: "Avatar uploaded successfully - relog to see changes",
               data: STORAGE_URL + data.path,
             });
           } else {
             // updating existing avatar
-            return res
-              .status(200)
-              .json({ message: "Avatar updated successfully", data });
+            return res.status(200).json({
+              message: "Avatar updated successfully",
+              data: STORAGE_URL + data.path,
+            });
           }
         });
     }

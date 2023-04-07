@@ -1,12 +1,33 @@
 import { Badge, Button, Popover } from "antd";
 import { ShoppingOutlined } from "@ant-design/icons";
-import React from "react";
-import { useCartStore } from "~/stores/cartStore";
+import React, { useEffect, useRef } from "react";
+import { type CartItem, useCartStore } from "~/stores/cartStore";
 import CartItemsList from "./CartItemsList";
 import { useRouter } from "next/router";
 
 const Cart = () => {
-  const { items } = useCartStore();
+  const { items, setItems } = useCartStore();
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const cart = localStorage.getItem("cart");
+      if (cart) {
+        const parsedCart = JSON.parse(cart) as CartItem[] | null;
+        if (Array.isArray(parsedCart)) {
+          setItems(parsedCart);
+        }
+      }
+    }
+  }, []);
+
+  const prevItems = useRef(items);
+  useEffect(() => {
+    // this check skips the first render which results in an empty cart
+    if (!prevItems.current.length && !items.length) {
+      return;
+    }
+    localStorage.setItem("cart", JSON.stringify(items));
+    prevItems.current = items;
+  }, [items]);
   const router = useRouter();
   return (
     <Popover

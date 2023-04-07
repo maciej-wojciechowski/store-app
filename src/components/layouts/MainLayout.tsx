@@ -66,7 +66,7 @@ const MainLayout: React.FC<Props> = ({ children, customFont }) => {
       </Head>
       <Layout className={`h-[100vh] overflow-hidden ${customFont.variable}`}>
         <Layout.Header className="flex items-center bg-themeGrey text-themeWhite">
-          <Link className="flex" href="/">
+          <Link className="flex hover:text-inherit" href="/">
             <span className="self-center font-barcelony text-xl hover:text-current">
               Store
             </span>
@@ -77,7 +77,7 @@ const MainLayout: React.FC<Props> = ({ children, customFont }) => {
           </Link>
           <div className="flex-1" />
           {sessionData?.user ? (
-            <span className="mx-5">{sessionData?.user.name}</span>
+            <span className="mx-3">{sessionData?.user.name}</span>
           ) : null}
           <Dropdown menu={{ items: menuItems }} trigger={["click"]}>
             <Avatar

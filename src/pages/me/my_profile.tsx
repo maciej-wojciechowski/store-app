@@ -69,12 +69,12 @@ const AvatarForm = ({ userId }: { userId?: string }) => {
     });
     const data = (await response.json()) as {
       message: string;
-      data?: { path: string };
+      data?: string;
     };
     if (response.status >= 200 && response.status < 300) {
       await message.success(data.message);
       // reload to see updated avatar
-      if (response.status === 200) {
+      if (data.message.includes("updated")) {
         router.reload();
       }
     } else {
