@@ -1,4 +1,4 @@
-import { Button, Typography, Upload } from "antd";
+import { Button, Spin, Typography, Upload, message } from "antd";
 import { LoadingOutlined, PlusOutlined } from "@ant-design/icons";
 import {
   type RcFile,
@@ -13,6 +13,7 @@ import { useForm } from "react-hook-form";
 import Address, { type AddressForm } from "~/components/Address";
 import { api } from "~/utils/api";
 import { myNotification } from "~/utils/notification";
+import { useRouter } from "next/router";
 
 const getBase64 = (img: RcFile, callback: (url: string) => void) => {
   const reader = new FileReader();
@@ -24,6 +25,7 @@ const AvatarForm = ({ userId }: { userId?: string }) => {
   const [loading, setLoading] = useState(false);
   const [file, setFile] = useState<RcFile>();
   const [imageUrl, setImageUrl] = useState<string>();
+  const router = useRouter();
 
   const uploadButton = (
     <div className="flex h-5 flex-col items-center justify-between">
@@ -57,24 +59,32 @@ const AvatarForm = ({ userId }: { userId?: string }) => {
     if (!file || !userId) {
       return;
     }
+    setLoading(true);
     const apiUrl = "/api/avatar/" + encodeURIComponent(userId);
     const formData = new FormData();
     formData.append("file", file);
-
-    try {
-      const response = await fetch(apiUrl, {
-        method: "POST",
-        body: formData,
-      });
-
-      console.log(response);
-    } catch (error) {
-      console.error(error);
+    const response = await fetch(apiUrl, {
+      method: "POST",
+      body: formData,
+    });
+    const data = (await response.json()) as {
+      message: string;
+      data?: { path: string };
+    };
+    if (response.status >= 200 && response.status < 300) {
+      await message.success(data.message);
+      // reload to see updated avatar
+      if (response.status === 200) {
+        router.reload();
+      }
+    } else {
+      void message.error(`Avatar upload failed - ${data.message}}`);
     }
+    setLoading(false);
   }
 
   return (
-    <>
+    <div className="mx-auto flex flex-col items-center justify-center [&_.ant-upload.ant-upload-select]:!ml-[3px]">
       <Upload
         showUploadList={false}
         maxCount={1}
@@ -82,13 +92,15 @@ const AvatarForm = ({ userId }: { userId?: string }) => {
         onChange={handleChange}
       >
         {imageUrl ? (
-          <img src={imageUrl} className="mx-auto max-w-[50%]" alt="avatar" />
+          <Spin spinning={loading}>
+            <img src={imageUrl} className="mx-auto max-w-[50%]" alt="avatar" />
+          </Spin>
         ) : (
           uploadButton
         )}
       </Upload>
       {file && <Button onClick={() => void sendAvatar()}>Send avatar</Button>}
-    </>
+    </div>
   );
 };
 
@@ -136,7 +148,7 @@ const MyProfile: NextPage = () => {
   };
 
   if (!sessionData?.user) {
-    return <div>You&aposre not logged in</div>;
+    return <div>{"You're not logged in"}</div>;
   }
 
   return (

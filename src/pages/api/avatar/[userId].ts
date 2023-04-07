@@ -56,18 +56,20 @@ export default async function handler(
           .status(500)
           .json({ message: "Internal server error - file not present" });
       }
-
-      if (!user.image) {
-        console.log("uploading new avatar");
-        void supabase.storage
-          .from("avatars")
-          .upload(userId + "_pic", fs.readFileSync(reqFile.filepath), {
-            contentType: reqFile.mimetype as string,
-          })
-          .then(async ({ data, error }) => {
-            if (error) {
-              return res.status(500).json({ message: error.message });
-            }
+      void supabase.storage
+        .from("avatars")
+        .upload(userId + "_pic", fs.readFileSync(reqFile.filepath), {
+          contentType: reqFile.mimetype as string,
+          upsert: true,
+          cacheControl: "0",
+        })
+        .then(async ({ data, error }) => {
+          if (error) {
+            return res.status(500).json({ message: error.message });
+          }
+          if (!user.image) {
+            // uploading new avatar
+            console.log("uploading new avatar");
             try {
               await prisma.user.update({
                 where: { id: userId },
@@ -78,27 +80,17 @@ export default async function handler(
                 .status(500)
                 .json({ message: "Error during avatar update" });
             }
+            return res.status(205).json({
+              message: "Avatar uploaded successfully - relog to see changes",
+              data: STORAGE_URL + data.path,
+            });
+          } else {
+            // updating existing avatar
             return res
               .status(200)
-              .json({ message: "Avatar uploaded successfully", data });
-          });
-      } else {
-        console.log("updating existing avatar");
-        void supabase.storage
-          .from("avatars")
-          .update(userId + "_pic", fs.readFileSync(reqFile.filepath), {
-            contentType: reqFile.mimetype as string,
-          })
-          .then(({ error }) => {
-            if (error) {
-              return res.status(500).json({ message: error.message });
-            } else {
-              return res
-                .status(200)
-                .json({ message: "Avatar updated successfully" });
-            }
-          });
-      }
+              .json({ message: "Avatar updated successfully", data });
+          }
+        });
     }
   });
 }
