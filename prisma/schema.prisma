@@ -1,16 +1,9 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
 generator client {
     provider = "prisma-client-js"
 }
 
 datasource db {
-    provider = "sqlite"
-    // NOTE: When using postgresql, mysql or sqlserver, uncomment the @db.Text annotations in model Account below
-    // Further reading:
-    // https://next-auth.js.org/adapters/prisma#create-the-prisma-schema
-    // https://www.prisma.io/docs/reference/api-reference/prisma-schema-reference#string
+    provider = "postgresql"
     url      = env("DATABASE_URL")
 }
 
@@ -20,19 +13,18 @@ model Example {
     updatedAt DateTime @updatedAt
 }
 
-// Necessary for Next auth
 model Account {
     id                String  @id @default(cuid())
     userId            String
     type              String
     provider          String
     providerAccountId String
-    refresh_token     String? // @db.Text
-    access_token      String? // @db.Text
+    refresh_token     String?
+    access_token      String?
     expires_at        Int?
     token_type        String?
     scope             String?
-    id_token          String? // @db.Text
+    id_token          String?
     session_state     String?
     user              User    @relation(fields: [userId], references: [id], onDelete: Cascade)
 
@@ -48,13 +40,26 @@ model Session {
 }
 
 model User {
-    id            String    @id @default(cuid())
-    name          String?
-    email         String?   @unique
-    emailVerified DateTime?
-    image         String?
-    accounts      Account[]
-    sessions      Session[]
+    id             String    @id @default(cuid())
+    name           String
+    email          String    @unique
+    emailVerified  DateTime?
+    image          String?
+    hashedPassword String?
+    accounts       Account[]
+    sessions       Session[]
+    address        Address?
+    Order          Order[]
+}
+
+model Address {
+    userId       String @id @unique
+    user         User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+    house_number String
+    street       String
+    phone        String
+    zip_code     String
+    city         String
 }
 
 model VerificationToken {
@@ -63,4 +68,73 @@ model VerificationToken {
     expires    DateTime
 
     @@unique([identifier, token])
+}
+
+model ShopItem {
+    id          String      @id @unique @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+    name        String
+    description String
+    price       Float
+    stock       Int
+    images      String[]    @default([])
+    category    Category    @default(others)
+    producer    Producer    @default(other)
+    OrderItem   OrderItem[]
+}
+
+model OrderItem {
+    id         String   @id @unique @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+    orderId    String   @db.Uuid
+    order      Order    @relation(fields: [orderId], references: [id], onDelete: Cascade)
+    shopItemId String   @db.Uuid
+    shopItem   ShopItem @relation(fields: [shopItemId], references: [id], onDelete: Cascade)
+    quantity   Int
+    price      Float
+}
+
+model Order {
+    id         String      @id @unique @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+    userId     String
+    user       User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+    items      OrderItem[]
+    createdAt  DateTime    @default(now())
+    updatedAt  DateTime    @updatedAt
+    status     OrderStatus @default(pending)
+    delivery   Delivery
+    totalPrice Float
+    address    String
+}
+
+enum Category {
+    accessories
+    tires
+    parts
+    oils
+    electronics
+    suspension
+    exhaust_systems
+    engine_parts
+    others
+}
+
+enum Producer {
+    nice_producer
+    bad_producer
+    medium_producer
+    so_so_producer
+    other
+}
+
+enum OrderStatus {
+    pending
+    processing
+    shipped
+    delivered
+    canceled
+}
+
+enum Delivery {
+    courier
+    post
+    pickup
 }

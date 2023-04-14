@@ -1,3 +1,11 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.anticon svg {
+  display: block;
+}
+
+button.ant-btn.ant-btn-primary {
+  @apply bg-themeTurkish;
+}
