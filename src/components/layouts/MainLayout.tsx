@@ -64,7 +64,7 @@ const MainLayout: React.FC<Props> = ({ children, customFont }) => {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <Layout className={`h-[100vh] overflow-hidden ${customFont.variable}`}>
+      <Layout className={`h-full overflow-hidden ${customFont.variable}`}>
         <Layout.Header className="flex items-center bg-themeGrey text-themeWhite">
           <Link className="flex hover:text-inherit" href="/">
             <span className="self-center font-barcelony text-xl hover:text-current">
@@ -87,7 +87,7 @@ const MainLayout: React.FC<Props> = ({ children, customFont }) => {
             />
           </Dropdown>
         </Layout.Header>
-        <Layout.Content className="relative flex h-screen w-screen flex-col overflow-hidden">
+        <Layout.Content className="relative flex h-[calc(100vh-64px)] w-screen flex-col overflow-hidden">
           <div className="overflow-scroll">{children}</div>
           <Cart />
         </Layout.Content>

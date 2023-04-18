@@ -4,9 +4,11 @@ import React, { useEffect, useRef } from "react";
 import { type CartItem, useCartStore } from "~/stores/cartStore";
 import CartItemsList from "./CartItemsList";
 import { useRouter } from "next/router";
+import { isMobile } from "~/helpers/cssHelpers";
 
 const Cart = () => {
   const { items, setItems } = useCartStore();
+
   useEffect(() => {
     if (typeof window !== "undefined") {
       const cart = localStorage.getItem("cart");
@@ -20,6 +22,7 @@ const Cart = () => {
   }, []);
 
   const prevItems = useRef(items);
+
   useEffect(() => {
     // this check skips the first render which results in an empty cart
     if (!prevItems.current.length && !items.length) {
@@ -28,16 +31,19 @@ const Cart = () => {
     localStorage.setItem("cart", JSON.stringify(items));
     prevItems.current = items;
   }, [items]);
+
   const router = useRouter();
+
   return (
     <Popover
-      placement="leftTop"
+      className={isMobile() ? "-mr-5" : ""}
+      placement={isMobile() ? "topRight" : "leftTop"}
       trigger="click"
       content={
-        <div className="relative w-96">
+        <div className="relative w-[88vw] max-w-lg">
           <CartItemsList
             items={items}
-            listClassName="max-h-[300px] overflow-auto"
+            listClassName="max-h-[300px] overflow-auto [&_span]:text-xs sm:[& _span]:text-md"
           />
           <Button
             className="absolute right-0 bottom-0"
