@@ -16,7 +16,7 @@ import {
 } from "~/helpers/selectsHelpers";
 import PriceRangeFilter from "./PriceRangeFilter";
 import { type Category, type Producer } from "@prisma/client";
-import { isMobile } from "~/helpers/cssHelpers";
+import { useIsMobile } from "~/hooks/useIsMobile";
 
 const getIconForFilter = (key: keyof IFilters) => {
   switch (key) {
@@ -44,7 +44,7 @@ const getFilterValue = (k: keyof IFilters, v: ValueOf<IFilters>): string => {
 
 const Filters = () => {
   const [isFilterOpen, setIsFilterOpen] = useState(false);
-
+  const isMobile = useIsMobile();
   const { filters, setFilters, setCategory, setProducer } = useFiltersStore(
     (state) => state
   );
@@ -84,6 +84,7 @@ const Filters = () => {
         onClose={() => setIsFilterOpen(false)}
         placement="left"
         open={isFilterOpen}
+        width={isMobile ? 230 : undefined}
       >
         <Menu
           onSelect={({ key, keyPath }) => {
@@ -119,7 +120,7 @@ const Filters = () => {
           </Menu.SubMenu>
           <Popover
             arrow={false}
-            placement={isMobile() ? "bottomLeft" : "rightTop"}
+            placement={isMobile ? "bottomLeft" : "rightTop"}
             content={<PriceRangeFilter />}
           >
             <Menu.Item icon={<SlidersOutlined />}>Price Range</Menu.Item>
