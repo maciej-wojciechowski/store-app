@@ -16,6 +16,7 @@ import {
 } from "~/helpers/selectsHelpers";
 import PriceRangeFilter from "./PriceRangeFilter";
 import { type Category, type Producer } from "@prisma/client";
+import { isMobile } from "~/helpers/cssHelpers";
 
 const getIconForFilter = (key: keyof IFilters) => {
   switch (key) {
@@ -47,6 +48,7 @@ const Filters = () => {
   const { filters, setFilters, setCategory, setProducer } = useFiltersStore(
     (state) => state
   );
+
   return (
     <>
       <div className="sticky top-0 left-0 z-10 mb-5 flex flex-wrap gap-3 py-5 pl-9 backdrop-blur">
@@ -117,7 +119,7 @@ const Filters = () => {
           </Menu.SubMenu>
           <Popover
             arrow={false}
-            placement="rightTop"
+            placement={isMobile() ? "bottomLeft" : "rightTop"}
             content={<PriceRangeFilter />}
           >
             <Menu.Item icon={<SlidersOutlined />}>Price Range</Menu.Item>
