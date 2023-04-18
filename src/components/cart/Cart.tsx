@@ -44,7 +44,7 @@ const Cart = () => {
         <div className="relative w-[88vw] max-w-lg">
           <CartItemsList
             items={items}
-            listClassName="max-h-[300px] overflow-auto [&_span]:text-xs sm:[& _span]:text-md"
+            listClassName="max-h-[300px] overflow-auto [&_span]:text-xs sm:[&_span]:text-base"
           />
           <Button
             className="absolute right-0 bottom-0"
