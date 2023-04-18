@@ -87,7 +87,7 @@ const MainLayout: React.FC<Props> = ({ children, customFont }) => {
             />
           </Dropdown>
         </Layout.Header>
-        <Layout.Content className="relative flex h-[calc(100vh-64px)] w-screen flex-col overflow-hidden">
+        <Layout.Content className="relative flex h-[calc(100dvh-64px)] w-screen flex-col overflow-hidden">
           <div className="overflow-scroll">{children}</div>
           <Cart />
         </Layout.Content>
