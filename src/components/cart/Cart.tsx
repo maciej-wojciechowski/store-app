@@ -4,10 +4,11 @@ import React, { useEffect, useRef } from "react";
 import { type CartItem, useCartStore } from "~/stores/cartStore";
 import CartItemsList from "./CartItemsList";
 import { useRouter } from "next/router";
-import { isMobile } from "~/helpers/cssHelpers";
+import { useIsMobile } from "~/hooks/useIsMobile";
 
 const Cart = () => {
   const { items, setItems } = useCartStore();
+  const isMobile = useIsMobile();
 
   useEffect(() => {
     if (typeof window !== "undefined") {
@@ -36,8 +37,8 @@ const Cart = () => {
 
   return (
     <Popover
-      className={isMobile() ? "-mr-5" : ""}
-      placement={isMobile() ? "topRight" : "leftTop"}
+      className={isMobile ? "-mr-5" : ""}
+      placement={isMobile ? "topRight" : "leftTop"}
       trigger="click"
       content={
         <div className="relative w-[88vw] max-w-lg">
