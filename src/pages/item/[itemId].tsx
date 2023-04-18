@@ -1,5 +1,5 @@
 import { type ShopItem } from "@prisma/client";
-import { Button, Carousel, Descriptions, InputNumber } from "antd";
+import { Button, Carousel, Descriptions, InputNumber, Typography } from "antd";
 import {
   type GetServerSideProps,
   type NextPage,
@@ -61,7 +61,7 @@ const ItemPage: NextPage<
           shopItem.images.map((image, index) => (
             <div className="!flex h-[600px] justify-center" key={index}>
               <img
-                className="max-h-min object-scale-down"
+                className="max-h-min object-contain sm:object-scale-down"
                 src={image}
                 alt={shopItem.name + String(index)}
               />
@@ -69,47 +69,45 @@ const ItemPage: NextPage<
           ))
         )}
       </Carousel>
-      <div className="relative mx-auto my-10 max-w-4xl">
-        <div className="absolute right-0 flex justify-end">
-          {itemsLeft <= 0 && (
-            <span className="mr-2 self-center">Out of stock</span>
-          )}
-          <InputNumber
-            addonBefore={<span>Qty</span>}
-            className="mr-2 w-28"
-            min={1}
-            onChange={(val) => val && setQty(val)}
-            disabled={itemsLeft <= 0}
-            max={itemsLeft}
-            value={qty}
-          />
-          <Button
-            disabled={itemsLeft <= 0}
-            onClick={() => {
-              if (itemsLeft <= 0) {
-                return;
-              }
-              addItem({
-                id: shopItem.id,
-                name: shopItem.name,
-                price: shopItem.price,
-                image: shopItem.images[0] ?? "/placeholder.jpeg",
-                stock: shopItem.stock,
-                qty: qty,
-              });
-            }}
-            type="primary"
-          >
-            Add to cart
-          </Button>
+      <div className="mx-auto my-10 max-w-4xl">
+        <div className="flex flex-col sm:flex-row">
+          <Typography.Title level={3}>{shopItem.name}</Typography.Title>
+          <div className="xs:flex-1" />
+          <div className="my-2 flex flex-1 justify-between sm:justify-end">
+            {itemsLeft <= 0 && (
+              <span className="mr-2 self-center">Out of stock</span>
+            )}
+            <InputNumber
+              addonBefore={<span>Qty</span>}
+              className="mr-2 w-28"
+              min={1}
+              onChange={(val) => val && setQty(val)}
+              disabled={itemsLeft <= 0}
+              max={itemsLeft}
+              value={qty}
+            />
+            <Button
+              disabled={itemsLeft <= 0}
+              onClick={() => {
+                if (itemsLeft <= 0) {
+                  return;
+                }
+                addItem({
+                  id: shopItem.id,
+                  name: shopItem.name,
+                  price: shopItem.price,
+                  image: shopItem.images[0] ?? "/placeholder.jpeg",
+                  stock: shopItem.stock,
+                  qty: qty,
+                });
+              }}
+              type="primary"
+            >
+              Add to cart
+            </Button>
+          </div>
         </div>
-        <Descriptions
-          className=""
-          column={1}
-          layout="horizontal"
-          title={shopItem.name}
-          bordered
-        >
+        <Descriptions className="" column={1} layout="horizontal" bordered>
           <Descriptions.Item label="Price">{shopItem.price}</Descriptions.Item>
           <Descriptions.Item label="In stock">
             {shopItem.stock}
