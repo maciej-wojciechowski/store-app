@@ -92,7 +92,7 @@ const Checkout: NextPage = () => {
       <Typography.Title className="text-center" level={3}>
         Checkout
       </Typography.Title>
-      <div className="mx-auto mb-20 flex w-[600px] flex-col">
+      <div className="mx-auto mb-20 flex flex-col sm:w-[600px]">
         <CartItemsList items={items} addToTotalAmount={delivery.cost}>
           <div className="my-10 flex justify-between">
             <div>

@@ -32,8 +32,12 @@ const CartItemsList = ({
           renderItem={(item, index) => (
             <List.Item>
               <span>{String(index + 1) + "."}</span>
-              <span className="ml-2 flex-grow">{item.name}</span>
-              <span className="mr-2">{item.price * item.qty} PLN</span>
+              <div className="flex flex-grow flex-col items-center [@media(min-width:400px)]:flex-row [@media(min-width:400px)]:justify-between">
+                <span className="ml-2  text-center [@media(min-width:400px)]:text-start">
+                  {item.name}
+                </span>
+                <span className="mr-2">{item.price * item.qty} PLN</span>
+              </div>
               <InputNumber
                 size="small"
                 className="mr-2 w-24"
