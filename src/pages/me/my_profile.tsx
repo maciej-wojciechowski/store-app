@@ -14,6 +14,7 @@ import Address, { type AddressForm } from "~/components/Address";
 import { api } from "~/utils/api";
 import { myNotification } from "~/utils/notification";
 import { useRouter } from "next/router";
+import Placeholder from "../../components/common/Placeholder";
 
 const getBase64 = (img: RcFile, callback: (url: string) => void) => {
   const reader = new FileReader();
@@ -148,7 +149,7 @@ const MyProfile: NextPage = () => {
   };
 
   if (!sessionData?.user) {
-    return <div>{"You're not logged in"}</div>;
+    return <Placeholder>{"You're not logged in"}</Placeholder>;
   }
 
   return (

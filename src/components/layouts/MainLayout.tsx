@@ -3,7 +3,7 @@ import { signIn, signOut, useSession } from "next-auth/react";
 import Head from "next/head";
 import Link from "next/link";
 import React, { type PropsWithChildren, type ReactElement } from "react";
-import { UserOutlined } from "@ant-design/icons";
+import { UserOutlined, QuestionOutlined } from "@ant-design/icons";
 import Cart from "../cart/Cart";
 import { ThunderboltTwoTone } from "@ant-design/icons";
 import { type NextFontWithVariable } from "next/dist/compiled/@next/font";
@@ -19,11 +19,19 @@ const MainLayout: React.FC<Props> = ({ children, customFont }) => {
   } = () => {
     if (!sessionData?.user) {
       return {
-        avatar: <span className="text-xs">Log in</span>,
+        avatar: <QuestionOutlined />,
         menuItems: [
           {
-            key: "1",
+            key: "0",
             label: <span onClick={() => void signIn()}>Log in</span>,
+          },
+          {
+            key: "1",
+            label: (
+              <Link href="register">
+                <span>Register</span>
+              </Link>
+            ),
           },
         ],
       };
