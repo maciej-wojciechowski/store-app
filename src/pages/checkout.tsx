@@ -14,6 +14,7 @@ import {
 import { useCartStore } from "~/stores/cartStore";
 import { api } from "~/utils/api";
 import { myNotification } from "~/utils/notification";
+import Placeholder from "../components/common/Placeholder";
 
 const deliveryOptions = getDeliveryLabelsForSelect();
 const DEFAULT_DELIVERY = getDeliveryCostWithKey("post");
@@ -47,7 +48,7 @@ const Checkout: NextPage = () => {
   const [whichAddress, setWhichAddress] = useState<"my" | "custom">("my");
 
   if (!sessionData?.user) {
-    return <div>Log in to checkout</div>;
+    return <Placeholder>Log in to checkout</Placeholder>;
   }
 
   const handleCreateOrder = async () => {

@@ -3,6 +3,7 @@ import { EyeFilled } from "@ant-design/icons";
 import { useSession } from "next-auth/react";
 import Link from "next/link";
 import { api } from "~/utils/api";
+import Placeholder from "../../../components/common/Placeholder";
 
 const MyOrders = () => {
   const { data: sessionData } = useSession();
@@ -13,7 +14,7 @@ const MyOrders = () => {
     }
   );
   if (!sessionData?.user) {
-    return <div>Log in to see your orders</div>;
+    return <Placeholder>Log in to see your orders</Placeholder>;
   }
 
   return (

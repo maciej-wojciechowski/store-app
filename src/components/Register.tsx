@@ -2,7 +2,7 @@ import React from "react";
 import { api } from "~/utils/api";
 import { useForm, type SubmitHandler } from "react-hook-form";
 import { signIn } from "next-auth/react";
-import { Button } from "antd";
+import { Button, Typography } from "antd";
 import ControllerInput from "./common/ControllerInput";
 
 type Inputs = {
@@ -23,7 +23,10 @@ const Register = () => {
     registerUser.mutate(data);
   };
   return (
-    <div className="flex h-[90vh] items-center">
+    <div className="flex h-[90vh] flex-col items-center justify-center">
+      <Typography.Title className="text-center">
+        Register new user
+      </Typography.Title>
       {/* eslint-disable-next-line @typescript-eslint/no-misused-promises */}
       <form onSubmit={handleSubmit(onSubmit)} className="mx-auto flex flex-col">
         <ControllerInput
