@@ -1,9 +1,9 @@
 # STORE APP
 Created with T3 template - fullstack project with authentication (Github provider or credentials)
 
-Preview: https://store-app-maciej-wojciechowski.vercel.app/
+Status: inactive
 
-Status: in progress
+Preview: https://store-app-maciej-wojciechowski.vercel.app/
 
 You can log in via: 
 
